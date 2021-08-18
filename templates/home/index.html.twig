@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Bonjour portail</h1>
     {% for user in users %}
-        <a href="#" class='link-primary'><span>{{ user.nom }}</span><span>{{ user.prenom }}</span></a>
+        <a href="{{ path('app_user_show', { id: user.id }) }}" class='link-primary'><span>{{ user.nom }}</span><span>{{ user.prenom }}</span></a>
     {% endfor %}
     
 {% endblock %}

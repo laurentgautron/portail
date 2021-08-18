@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}{{ user.nom }}{{ user.prenom }}{% endblock %}
+
+{% block body %}
+    <p>Nom: {{ user.nom }}</p>
+    <p>Prenom: {{ user.prenom }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Adresse: {{ user.adresse }}</p>
+    <p>Code postal: {{ user.codePostal }}</p>
+    <p>Téléphone: {{ user.telephone }}</p>
+    <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
+{% endblock %}

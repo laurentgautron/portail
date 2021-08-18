@@ -3,6 +3,9 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<h1 class='mx-4'>Bonjour portail</h1>
+    <h1>Bonjour portail</h1>
+    {% for user in users %}
+        <a href="#" class='link-primary'><span>{{ user.nom }}</span><span>{{ user.prenom }}</span></a>
+    {% endfor %}
     
 {% endblock %}

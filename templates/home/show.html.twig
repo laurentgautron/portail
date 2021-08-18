@@ -10,4 +10,8 @@
     <p>Code postal: {{ user.codePostal }}</p>
     <p>Téléphone: {{ user.telephone }}</p>
     <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
+    <div class="cta">
+        <a href="{{ path('app_user_mod', { id: user.id}) }}" class='btn btn-primary'>Modifier</a>
+        <a href="#" class='btn btn-danger'>Supprimer</a>
+    </div>
 {% endblock %}

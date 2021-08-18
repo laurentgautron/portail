@@ -1,0 +1,15 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}modification{{ user.id }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <h1>modification utilisateur</h1>
+            {{ include('home/_form.html.twig', {'submitBottomText': 'modifier'}) }}
+        </div>
+    </div>
+    
+
+{% endblock %}

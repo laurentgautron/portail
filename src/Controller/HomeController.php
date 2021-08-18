@@ -56,4 +56,27 @@ class HomeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/user/{id<[0-9]+>}/mod", name="app_user_mod", methods={"GET", "POST"})
+     * 
+     */
+    public function edit(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()) {
+            $em->flush($user);
+            $this->addFlash('success', 'pin modifié avec succés');
+
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('home/modification.html.twig', [
+            "user" => $user,
+            "form" => $form->createView()
+        ]);
+    }
 }

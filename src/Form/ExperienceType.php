@@ -2,32 +2,31 @@
 
 namespace App\Form;
 
-use App\Entity\User;
-use App\Form\ExperienceType;
+use App\Entity\Experience;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends AbstractType
+class ExperienceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
-            ->add('nom')
-            ->add('prenom')
-            ->add('adresse')
-            ->add('codePostal')
-            ->add('password', PasswordType::class)
-            ->add('telephone')
+            ->add('fonction')
+            ->add('lieu')
+            ->add('beginAt')
+            ->add('stopAt')
+            ->add('description')
+            ->add('contexte')
+            ->add('realisation')
+            ->add('techinque')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Experience::class,
         ]);
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,37 +25,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *  @Assert\NotBlank
+     *  message = "Vous devez saisir une adresse mail !"
+     * 
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * 
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *  @Assert\NotBlank
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(min=3)
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $codePostal;
 
@@ -68,8 +81,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $telephone;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $exp;
+
+    public function __construct()
+    {
+        $this->exp = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -252,6 +276,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelephone(int $telephone): self
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Experience[]
+     */
+    public function getExp(): Collection
+    {
+        return $this->exp;
+    }
+
+    public function addExp(Experience $exp): self
+    {
+        if (!$this->exp->contains($exp)) {
+            $this->exp[] = $exp;
+            $exp->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExp(Experience $exp): self
+    {
+        if ($this->exp->removeElement($exp)) {
+            // set the owning side to null (unless already changed)
+            if ($exp->getUser() === $this) {
+                $exp->setUser(null);
+            }
+        }
 
         return $this;
     }

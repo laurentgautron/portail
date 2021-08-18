@@ -14,4 +14,10 @@
         <a href="{{ path('app_user_mod', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
         <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
     </div>
+    
+    {% for experience in user.exp %}
+        <p>Descrition: {{ experience.description }}</p>
+        <p>fonction: {{ experience.fonction }}</p>
+        <p>Réalisation: {{ experience.realisation }}</p>
+    {% endfor %}
 {% endblock %}

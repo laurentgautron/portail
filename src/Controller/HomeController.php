@@ -79,4 +79,18 @@ class HomeController extends AbstractController
             "form" => $form->createView()
         ]);
     }
+
+     /**
+     * @Route("/user/{id<[0-9]+>}/delete", name="app_user_delete", methods={"GET"})
+     * 
+     * 
+     */
+    public function delete(User $user, EntityManagerInterface $em): Response
+    {
+        $em->remove($user);
+        $em->flush();
+        $this->addFlash('info', 'profil supprimé avec succés');
+
+        return $this->redirectToRoute('app_home');   
+    }
 }

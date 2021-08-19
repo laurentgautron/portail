@@ -72,7 +72,7 @@ class HomeController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
             $em->flush($user);
-            $this->addFlash('success', 'pin modifié avec succés');
+            $this->addFlash('success', 'profil modifié avec succés');
 
             return $this->redirectToRoute('app_home');
         }

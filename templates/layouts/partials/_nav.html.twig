@@ -3,6 +3,7 @@
     <ul>
         {% if app.user %}
             <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
+            <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Mon profil</a></li>
             <li><a href="{{ path('app_mod') }}">Modifications</a></li>
             <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
         {% else %}

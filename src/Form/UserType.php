@@ -28,7 +28,8 @@ class UserType extends AbstractType
                     'choices' => [
                         'Admin' => 'ROLE_ADMIN',
                         'Collaborateur' => 'ROLE_COLL',
-                        'commercial' => 'ROLE_COM'
+                        'commercial' => 'ROLE_COM',
+                        'Candidat' => 'ROLE_CAND'
                     ],
                 ],
       ])

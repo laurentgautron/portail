@@ -30,6 +30,7 @@
                     <p>Lieu: {{ experience.lieu }}</p>
                     <p>Contexte: {{ experience.contexte }}</p>
                     <p>Environnement technique: {{ experience.technique }}</p>
+                    <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
                 </div>
             {% endfor %}
         </div>

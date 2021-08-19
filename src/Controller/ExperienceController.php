@@ -47,4 +47,19 @@ class ExperienceController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/experience/{id<[0-9]+>}/delete", name="app_experience_delete", methods={"GET"})
+     * 
+     */
+    public function delete(Experience $experience, EntityManagerInterface $em): Response
+    {
+        $userId = $experience->getUser()->getId();
+        $em->remove($experience);
+        $em->flush();
+        $this->addFlash('info', 'experience supprimée avec succés');
+        $url = '/user'.'/'.$userId;
+
+        return $this->redirect($url);   
+    }
 }

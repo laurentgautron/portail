@@ -1,7 +1,12 @@
 <aside class='mx-0'>
     <h2><a href="{{ path('app_home') }}" class="tex-muted">Portail de compétences</a></h2>
     <ul>
-        <li><a href="#">Se connecter</a></li>
-        <li><a href="{{ path('app_user_create') }}">créer un profil</a></li>
+        {% if app.user %}
+            <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
+            <li><a href="{{ path('app_mod') }}">Modifications</a></li>
+            <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
+        {% else %}
+            <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+        {% endif %}
     </ul>
 </aside>

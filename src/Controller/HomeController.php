@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class HomeController extends AbstractController
 {
@@ -36,7 +37,7 @@ class HomeController extends AbstractController
      * @Route("/user/create", name="app_user_create", methods={"GET", "POST"})
      *
      */
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
@@ -44,10 +45,11 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
             $em->persist($user);
             $em->flush($user);
 
-            $this->addFlash('success', 'pin creé avec succés');
+            $this->addFlash('success', 'profil créé avec succés');
 
             return $this->redirectToRoute('app_home');
         }
@@ -61,13 +63,14 @@ class HomeController extends AbstractController
      * @Route("/user/{id<[0-9]+>}/mod", name="app_user_mod", methods={"GET", "POST"})
      * 
      */
-    public function edit(Request $request, User $user, EntityManagerInterface $em): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
             $em->flush($user);
             $this->addFlash('success', 'pin modifié avec succés');
 
@@ -92,5 +95,14 @@ class HomeController extends AbstractController
         $this->addFlash('info', 'profil supprimé avec succés');
 
         return $this->redirectToRoute('app_home');   
+    }
+
+    /**
+     * @Route("/mod", name="app_mod", methods={"GET"})
+     * 
+     */
+    public function modif():Response
+    {
+        return $this->render('home/mod.html.twig');
     }
 }

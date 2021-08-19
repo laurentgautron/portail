@@ -3,21 +3,38 @@
 {% block title %}{{ user.nom }}{{ user.prenom }}{% endblock %}
 
 {% block body %}
-    <p>Nom: {{ user.nom }}</p>
-    <p>Prenom: {{ user.prenom }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Adresse: {{ user.adresse }}</p>
-    <p>Code postal: {{ user.codePostal }}</p>
-    <p>Téléphone: {{ user.telephone }}</p>
-    <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
-    <div class="cta">
-        <a href="{{ path('app_user_mod', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
-        <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
+    <div class="container d-flex">
+        <div class="utilisateur">
+            <p>Nom: {{ user.nom }}</p>
+            <p>Prenom: {{ user.prenom }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Adresse: {{ user.adresse }}</p>
+            <p>Code postal: {{ user.codePostal }}</p>
+            <p>Téléphone: {{ user.telephone }}</p>
+            <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
+            <div class="cta">
+                <a href="{{ path('app_user_mod', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
+                <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
+            </div>
+        </div>
+        
+        <div class="experienceContainer">
+            <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary">Ajouter une expérience</a>
+            {% for experience in user.exp %}
+                <div class="experience">
+                    <span>Du {{ experience.beginAt | date('Y/m/d') }} </span>
+                    <span>AU {{ experience.stopAt | date('Y/m/d') }}</span>
+                    <p>Descrition: {{ experience.description }}</p>
+                    <p>fonction: {{ experience.fonction }}</p>
+                    <p>Réalisation: {{ experience.realisation }}</p>
+                    <p>Lieu: {{ experience.lieu }}</p>
+                    <p>Contexte: {{ experience.contexte }}</p>
+                    <p>Environnement technique: {{ experience.technique }}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
     
-    {% for experience in user.exp %}
-        <p>Descrition: {{ experience.description }}</p>
-        <p>fonction: {{ experience.fonction }}</p>
-        <p>Réalisation: {{ experience.realisation }}</p>
-    {% endfor %}
+    
+    
 {% endblock %}

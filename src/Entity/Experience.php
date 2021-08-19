@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ExperienceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=ExperienceRepository::class)
@@ -19,43 +21,59 @@ class Experience
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * message="veuillez indiquer la fonction que vous aviez"
+     * 
      */
     private $fonction;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * message="veuillez indiquer lle lieu où vous avez travaillé"
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Assert\NotBlank
+     * message="veuillez indiquer la date de début"
      */
     private $beginAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
+     * 
      */
     private $stopAt;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * message="veuillez indiquer une description de votre travail"
      */
     private $description;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * message="veuillez indiquer le contexte dans lequel vous avez effectué votre mission"
      */
     private $contexte;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * message="veuillez indiquer les projets réalisés"
      */
     private $realisation;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * message="veuillez indiquer les techniques utilisées"
      */
-    private $techinque;
+    private $technique;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="exp")
@@ -152,14 +170,14 @@ class Experience
         return $this;
     }
 
-    public function getTechinque(): ?string
+    public function getTechnique(): ?string
     {
-        return $this->techinque;
+        return $this->technique;
     }
 
-    public function setTechinque(string $techinque): self
+    public function setTechnique(string $technique): self
     {
-        $this->techinque = $techinque;
+        $this->technique = $technique;
 
         return $this;
     }

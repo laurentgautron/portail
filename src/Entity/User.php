@@ -41,31 +41,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      *  @Assert\NotBlank
+     * message= "vous decez choisir un mot de passe"
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Length(min=3)
+     * message = " vous devez renseigner un nom d'utilisateur"
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * message = "vous devez renseigner un prenom utilisateur"
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * message = "vous devez renseigner une adresse"
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * message = "entrez votre code postal"
      */
     private $codePostal;
 
@@ -82,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
+     * message="vous devez renseigner un numéro de téléphone"
      */
     private $telephone;
 

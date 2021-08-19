@@ -19,7 +19,7 @@ class ExperienceType extends AbstractType
             ->add('description')
             ->add('contexte')
             ->add('realisation')
-            ->add('techinque')
+            ->add('technique')
         ;
     }
 

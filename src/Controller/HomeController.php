@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -37,7 +38,7 @@ class HomeController extends AbstractController
      * @Route("/user/create", name="app_user_create", methods={"GET", "POST"})
      *
      */
-    public function create(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function create(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, SluggerInterface $slugger): Response
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
@@ -45,6 +46,25 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $brochureFile */
+            $documentFile = $form->get('document')->getData();
+
+            if ($documentFile) {
+                $originalFilename = pathinfo($documentFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$documentFile->guessExtension();
+
+                try {
+                    $documentFile->move(
+                        $this->getParameter('documents_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $user->setDocumentFilename($newFilename);
+            }
             $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
             $em->persist($user);
             $em->flush($user);
@@ -104,5 +124,27 @@ class HomeController extends AbstractController
     public function modif():Response
     {
         return $this->render('home/mod.html.twig');
+    }
+
+    /**
+     * @Route("/document/new", name="app_document_new")
+     */
+    public function newDoc(Request $request, SluggerInterface $slugger)
+    {
+        $user = new User;
+        $form = $this->createForm(ProductType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+
+            // ... persist the $product variable or any other work
+
+            return $this->redirectToRoute('app_product_list');
+        }
+
+        return $this->render('product/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

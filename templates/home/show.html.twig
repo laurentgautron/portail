@@ -9,6 +9,7 @@
             <p>Prenom: {{ user.prenom }}</p>
             <p>Email: {{ user.email }}</p>
             <p>Adresse: {{ user.adresse }}</p>
+            <p>Ville: {{ user.ville }}</p>
             <p>Code postal: {{ user.codePostal }}</p>
             <p>Téléphone: {{ user.telephone }}</p>
             <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
@@ -16,7 +17,9 @@
             {% else %}
                 <div class="cta">
                     <a href="{{ path('app_user_mod', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

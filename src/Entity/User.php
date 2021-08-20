@@ -97,6 +97,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $exp;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $ville;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $documentFilename;
+
+    public function getDocumentFilename()
+    {
+        return $this->documentFilename;
+    }
+
+    public function setDocumentFilename($documentFilename)
+    {
+        $this->documentFilename = $documentFilename;
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->exp = new ArrayCollection();
@@ -144,7 +166,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        //$roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -313,6 +335,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $exp->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(string $ville): self
+    {
+        $this->ville = $ville;
 
         return $this;
     }

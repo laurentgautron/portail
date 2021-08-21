@@ -31,6 +31,7 @@ class ExperienceController extends AbstractController
         $experience = new Experience;
         $experience->setUser($user);
         $form = $this->createForm(ExperienceType::class, $experience);
+        //dd($request);
 
         $form->handleRequest($request);
         

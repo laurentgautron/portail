@@ -4,49 +4,67 @@
 
 {% block body %}
     {% if app.user and (app.user.id == user.id or (is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')))%}
-    <div class="container d-flex">
-        <div class="utilisateur">
-            <p>Nom: {{ user.nom }}</p>
-            <p>Prenom: {{ user.prenom }}</p>
-            <p>Email: {{ user.email }}</p>
-            <p>Adresse: {{ user.adresse }}</p>
-            <p>Ville: {{ user.ville }}</p>
-            <p>Code postal: {{ user.codePostal }}</p>
-            <p>Téléphone: {{ user.telephone }}</p>
-            <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
-            {% if app.user.id == user.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_COM') %}
-                <div class="cta">
-                    <a href="{{ path('app_user_mod', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
+    <h1 class='text-center text-primary'>{{ user.nom }} {{ user.prenom }}</h1>
+    <div class="informations d-flex">
+        <div class="user-comp">
+            <div class="coordonnees px-2">
+                <h2>Coordonnées:</h2>
+                    <p>Nom: {{ user.nom }}</p>
+                    <p>Prenom: {{ user.prenom }}</p>
+                    <p>Email: {{ user.email }}</p>
+                    <p>Adresse: {{ user.adresse }}</p>
+                    <p>Ville: {{ user.ville }}</p>
+                    <p>Code postal: {{ user.codePostal }}</p>
+                    <p>Téléphone: {{ user.telephone }}</p>
+                    <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
+                    <p>À: {{ user.createdAt | date('H:i:s')}}</p>
+                    {% if app.user.id == user.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_COM') %}
+                        <div class="cta mt-3 mb-2">
+                            <a href="{{ path('app_user_mod', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
+                            {% endif %}
+                        </div>
                     {% endif %}
-                </div>
-            {% endif %}
+                {% else %}
+                    <p>Vous devez être connecté en tant que commercial au administrateur pour voir un profil</p>
+                    <a href="{{ path('app_home') }}" class="btn btn-primary">Accueil</a>
+                {% endif %}
+            </div>
         </div>
-        
-        <div class="experienceContainer">
-            <h2>Expériences</h2>
-            {% if app.user.id == user.id or is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary">Ajouter une expérience</a>
+        <div class="nextInfo mx-2">
+            <h2>Expériences:</h2>
+            {% if app.user.id == user.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_COM') %}
+                <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary mb-2">Ajouter une expérience</a>
             {% endif %}
-            {% for experience in user.exp %}
-                <div class="experience">
-                    <span>Du {{ experience.beginAt | date('Y/m/d') }} </span>
-                    <span>AU {{ experience.stopAt | date('Y/m/d') }}</span>
-                    <p>Descrition: {{ experience.description }}</p>
-                    <p>fonction: {{ experience.fonction }}</p>
-                    <p>Réalisation: {{ experience.realisation }}</p>
-                    <p>Lieu: {{ experience.lieu }}</p>
-                    <p>Contexte: {{ experience.contexte }}</p>
-                    <p>Environnement technique: {{ experience.technique }}</p>
-                    {% if app.user.id == user.id or is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
-                    {% endif %}
+            <div class="containerExperience mb-1 px-2">
+                {% for experience in user.exp %}
+                    <div class="oneExp">
+                        <span>Du {{ experience.beginAt | date('Y/m/d') }} </span>
+                        <span>AU {{ experience.stopAt | date('Y/m/d') }}</span>
+                        <p>Descrition: {{ experience.description }}</p>
+                        <p>fonction: {{ experience.fonction }}</p>
+                        <p>Réalisation: {{ experience.realisation }}</p>
+                        <p>Lieu: {{ experience.lieu }}</p>
+                        <p>Contexte: {{ experience.contexte }}</p>
+                        <p>Environnement technique: {{ experience.technique }}</p>
+                        {% if app.user.id == user.id or is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
+                        {% endif %}
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+            <div class="competences px-2">
+                    <h2>Compétences:</h2>
+                    {% for competence in user.userComp %}
+                        <p>Competence: {{ competence.competence.nomCompetence }}</p>
+                        <p>niveau: {{ competence.niveau }}</p>
+                        <p>Appetence: {{ competence.appetence }}</p>
+                        <hr>
+                    {% endfor %}
+                    <a href="#" class="btn btn-primary mb-2">Ajouter une competence</a>
                 </div>
-            {% endfor %}
         </div>
     </div>
-    {% else %}
-        <p>Vous devez être connecté pour voir un profil</p>
-    {% endif %}
 {% endblock %}

@@ -93,7 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $telephone;
 
     /**
-     * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="user")
      */
     private $exp;
 
@@ -106,6 +106,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $documentFilename;
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserCompetences::class, mappedBy="user")
+     */
+    private $userComp;
 
     public function getDocumentFilename()
     {
@@ -122,6 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->exp = new ArrayCollection();
+        $this->userComp = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -333,6 +339,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($exp->getUser() === $this) {
                 $exp->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserCompetences[]
+     */
+    public function getUserComp(): Collection
+    {
+        return $this->userComp;
+    }
+
+    public function addUserComp(UserCompetences $userComp): self
+    {
+        if (!$this->userComp->contains($userComp)) {
+            $this->userComp[] = $userComp;
+            $userComp->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserComp(UserCompetences $userComp): self
+    {
+        if ($this->userComp->removeElement($userComp)) {
+            // set the owning side to null (unless already changed)
+            if ($userComp->getUser() === $this) {
+                $userComp->setUser(null);
             }
         }
 

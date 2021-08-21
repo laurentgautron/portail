@@ -1,5 +1,5 @@
-body {
-    height: 100vh;
+body, html {
+    height: 100%;
     width: 100vw;
 }
 
@@ -11,21 +11,55 @@ a {
     text-decoration: none;
 }
 
-.utilisateur, .experienceContainer {
-    height: 80vh;
-    border: 2px solid blue;
+.containerExperience {
+    height: 46vh;
+    width: 70vw;
     overflow: scroll;
 }
 
-.experience {
-    border: 2px solid black;
-    width: 60vw;
+.utilisateur {
+    height: 50vh;
+    width: 30%;
 }
 
 main {
-    height: 80vh;
+    max-width: 100%;
+    width: 100%;
+    height: 80%;
 }
 
 form {
     width: 70%;
+}
+
+.competences {
+    height: 35%;
+    overflow: scroll;
+}
+
+.navigation {
+    width: 20%;
+}
+
+.mainContainer {
+    max-width: 100%;
+}
+
+.informations {
+    width: 100%;
+    height: 75vh;
+}
+
+.user-comp {
+    height: 78%;
+}
+.containerExperience, 
+.competences,
+.coordonnees {
+    border: 2px solid black;
+}
+
+hr {
+    border-top: 2px solid black;
+    background-color: black;
 }

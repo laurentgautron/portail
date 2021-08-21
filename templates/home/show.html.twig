@@ -63,7 +63,7 @@
                         <p>Appetence: {{ competence.appetence }}</p>
                         <hr>
                     {% endfor %}
-                    <a href="#" class="btn btn-primary mb-2">Ajouter une competence</a>
+                    <a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
                 </div>
         </div>
     </div>

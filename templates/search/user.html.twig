@@ -1,0 +1,18 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}research{% endblock %}
+
+{% block body %}
+    <h1>Bonjour pour un formulaire</h1>
+    {{ form_start(formResearch) }}
+    {{ form_end(formResearch) }}
+    {% if app.request.method == 'POST' and users | length == 0 %}
+        <h2>Pas de résultat pour la recherche !</h2>
+    {% else %}
+        {% for user in users %}
+            <p>Nom: {{ user.nom }}</p>
+            <p>Prenom: {{ user.prenom }}</p>
+            <a href="{{ path('app_user_show', {id: user.id}) }}">Voir la fiche</a>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

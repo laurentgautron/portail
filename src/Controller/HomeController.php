@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\SearchType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -145,6 +146,26 @@ class HomeController extends AbstractController
 
         return $this->render('product/new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/search", name="app_search")
+     */
+    public function research(Request $request, UserRepository $userRepository)
+    {
+        $users = [];
+        $form = $this->createForm(SearchType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $criteres = $form->getData();
+            $users = $userRepository->findBy($criteres);
+        }
+
+        return $this->render('search/user.html.twig', [
+            'formResearch' => $form->createView(),
+            'users' => $users
         ]);
     }
 }

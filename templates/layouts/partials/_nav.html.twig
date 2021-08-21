@@ -6,6 +6,7 @@
             <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Mon profil</a></li>
             <li><a href="{{ path('app_mod') }}">Modifications</a></li>
             <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
+            <li><a href="{{ path('app_search') }}">Recherches</a></li>
         {% else %}
             <li><a href="{{ path('app_login') }}">Se connecter</a></li>
         {% endif %}

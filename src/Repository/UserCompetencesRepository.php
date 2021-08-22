@@ -19,22 +19,18 @@ class UserCompetencesRepository extends ServiceEntityRepository
         parent::__construct($registry, UserCompetences::class);
     }
 
-    // /**
-    //  * @return UserCompetences[] Returns an array of UserCompetences objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return UserCompetences[] Returns an array of UserCompetences objects
+      */
+    public function searchComp($value)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.competence = :val')
             ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?UserCompetences

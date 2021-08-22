@@ -130,7 +130,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/document/new", name="app_document_new")
      */
-    public function newDoc(Request $request, SluggerInterface $slugger)
+    public function newDoc(Request $request)
     {
         $user = new User;
         $form = $this->createForm(ProductType::class, $user);

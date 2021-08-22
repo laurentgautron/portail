@@ -112,6 +112,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $userComp;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastLogin;
+
     public function getDocumentFilename()
     {
         return $this->documentFilename;
@@ -383,6 +388,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVille(string $ville): self
     {
         $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }

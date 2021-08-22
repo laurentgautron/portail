@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class UserType extends AbstractType
@@ -36,7 +37,19 @@ class UserType extends AbstractType
                     ],
                 ],
             ])
-            ->add('password', PasswordType::class)
+            ->add('password', RepeatedType::class, [
+                'type'            => PasswordType::class,
+                'invalid_message' => 'Le mot de passe et la confirmation doivent être identique',
+                'required'        => true,
+                'first_options'   => [
+                    'label' => 'Mot de passe',
+                    'attr'  => ['placeholder' => 'Merci de saisir votre mot de passe.']
+                ],
+                'second_options'  => [
+                    'label' => 'Confirmez votre mot de passe',
+                    'attr'  => ['placeholder' => 'Merci de confirmer votre mot de passe.']
+                ]
+            ])
             ->add('telephone')
             ->add('document', FileType::class, [
                 'label' => 'Document (PDF file)',

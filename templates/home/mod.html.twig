@@ -5,9 +5,22 @@
 {% block body %}
 
     <div class="d-flex flex-column">
-        <a href="#">Compétences</a>
-        <a href="#">Catégories</a>
-        <a href="#">Entreprises</a>
+        <div>
+            <h2>Competences</h2>
+            <a href="{{ path('app_add_competences') }}" class="btn btn-primary">ajouter une competence</a>
+            <a href="" class="btn btn-danger">supprimer une competence</a>
+        </div>
+        <div>
+            <h2>Catégories</h2>
+            <a href="#" class="btn btn-primary">ajouter une catégorie</a>
+            <a href="" class="btn btn-danger">supprimer une catégorie</a>
+        </div>
+        <div>
+            <h2>Entreprises</h2>
+            <a href="#" class="btn btn-primary">ajouter une entreprise</a>
+            <a href="" class="btn btn-danger">supprimer une entreprise</a>
+        </div>
+        
     </div>
     
 

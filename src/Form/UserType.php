@@ -30,6 +30,7 @@ class UserType extends AbstractType
                     'mapped' => false,
                     'label' => 'rôle',
                     'choices' => [
+                        'idem' => 'idem',
                         'Admin' => 'ROLE_ADMIN',
                         'Collaborateur' => 'ROLE_COLL',
                         'commercial' => 'ROLE_COM',

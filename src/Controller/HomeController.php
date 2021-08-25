@@ -91,10 +91,18 @@ class HomeController extends AbstractController
         //dd($user->getRoles()[0]);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+        $piorUserRole = $user->getRoles()[0];
+        //dd($piorUserRole);
         
         if($form->isSubmitted() && $form->isValid()) {
+            //dd($form->get('newroles')->getData());
             // $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
-            $user->setRoles($form->get('newroles')->getData());
+            if ($form->get('newroles')->getData() == 'idem') {
+                $user->setRoles($piorUserRole);
+            }
+            else {
+                $user->setRoles($form->get('newroles')->getData());
+            }
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class HomeController extends AbstractController
@@ -67,6 +68,7 @@ class HomeController extends AbstractController
                 $user->setDocumentFilename($newFilename);
             }
             $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
+            $user->setRoles($form->get('newroles')->getData());
             $em->persist($user);
             $em->flush($user);
 
@@ -81,17 +83,18 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/user/{id<[0-9]+>}/mod", name="app_user_mod", methods={"GET", "POST"})
+     * @Route("/user/{id<[0-9]+>}/edit", name="app_user_edit", methods={"GET", "POST"})
      * 
      */
-    public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder): Response
     {
+        //dd($user->getRoles()[0]);
         $form = $this->createForm(UserType::class, $user);
-
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
+            // $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
+            $user->setRoles($form->get('newroles')->getData());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 

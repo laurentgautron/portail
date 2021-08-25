@@ -182,9 +182,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(string $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = [$roles];
 
         return $this;
     }
@@ -402,5 +402,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastLogin = $lastLogin;
 
         return $this;
+    }
+
+    public function __toString():string
+    {
+        return 'bonjour';
     }
 }

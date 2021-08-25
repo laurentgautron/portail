@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class UserType extends AbstractType
 {
@@ -25,17 +26,15 @@ class UserType extends AbstractType
             ->add('adresse')
             ->add('codePostal')
             ->add('ville')
-            ->add('roles', CollectionType::class, [
-                'entry_type'   => ChoiceType::class,
-                'entry_options'  => [
-                    'label' => false,
+            ->add('newroles', ChoiceType::class, [
+                    'mapped' => false,
+                    'label' => 'rôle',
                     'choices' => [
                         'Admin' => 'ROLE_ADMIN',
                         'Collaborateur' => 'ROLE_COLL',
                         'commercial' => 'ROLE_COM',
                         'Candidat' => 'ROLE_CAND'
                     ],
-                ],
             ])
             ->add('password', RepeatedType::class, [
                 'type'            => PasswordType::class,
@@ -66,6 +65,7 @@ class UserType extends AbstractType
                     ])
                 ],
             ])
+            ->add('Enregistrer', SubmitType::class)
         ;
     }
 

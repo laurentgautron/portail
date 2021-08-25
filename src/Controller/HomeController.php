@@ -40,7 +40,7 @@ class HomeController extends AbstractController
      * @Route("/user/create", name="app_user_create", methods={"GET", "POST"})
      *
      */
-    public function create(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, SluggerInterface $slugger): Response
+    public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder, SluggerInterface $slugger): Response
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
@@ -67,7 +67,7 @@ class HomeController extends AbstractController
 
                 $user->setDocumentFilename($newFilename);
             }
-            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
+            $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
             $user->setRoles($form->get('newroles')->getData());
             $em->persist($user);
             $em->flush($user);

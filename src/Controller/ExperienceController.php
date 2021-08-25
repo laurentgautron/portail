@@ -50,6 +50,32 @@ class ExperienceController extends AbstractController
     }
 
     /**
+     * @Route("/experience/{id<[0-9]+>}/edit", name="app_experience_edit", methods={"GET", "POST"})
+     * 
+     */
+    public function edit(Request $request, Experience $experience, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(ExperienceType::class, $experience);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() and $form->isValid()) {
+            $userId = $experience->getUser()->getId();
+            $em->persist($experience);
+            $em->flush($experience);
+
+            $this->addFlash('info', 'experience modifiée avec succés');
+            $url = '/user'.'/'.$userId;
+
+            return $this->redirect($url);
+        }
+
+        return $this->render('experience/edit.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+
+
+    /**
      * @Route("/experience/{id<[0-9]+>}/delete", name="app_experience_delete", methods={"GET"})
      * 
      */

@@ -43,6 +43,7 @@
                         <p>Contexte: {{ experience.contexte }}</p>
                         <p>Environnement technique: {{ experience.technique }}</p>
                         <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
+                        <a href="{{ path('app_experience_edit', {id: experience.id}) }}" class="btn btn-primary">Modifier</a>
                     </div>
                     <hr>
                 {% endfor %}

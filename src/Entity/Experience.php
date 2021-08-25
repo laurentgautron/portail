@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * @ORM\Entity(repositoryClass=ExperienceRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\ExperienceRepository::class)
  */
 class Experience
 {

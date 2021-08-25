@@ -80,6 +80,11 @@ class Experience
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Entreprise::class, inversedBy="experience")
+     */
+    private $entreprise;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -189,6 +194,18 @@ class Experience
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEntreprise(): ?Entreprise
+    {
+        return $this->entreprise;
+    }
+
+    public function setEntreprise(?Entreprise $entreprise): self
+    {
+        $this->entreprise = $entreprise;
 
         return $this;
     }

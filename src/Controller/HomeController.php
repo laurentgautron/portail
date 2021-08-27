@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Form\SearchType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,6 +45,7 @@ class HomeController extends AbstractController
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
+        $form->remove('currentRole');
 
         $form->handleRequest($request);
         
@@ -68,7 +70,7 @@ class HomeController extends AbstractController
                 $user->setDocumentFilename($newFilename);
             }
             $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
-            $user->setRoles($form->get('newroles')->getData());
+            $user->setRoles($form->get('newRole')->getData());
             $em->persist($user);
             $em->flush($user);
 
@@ -88,21 +90,21 @@ class HomeController extends AbstractController
      */
     public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder): Response
     {
-        //dd($user->getRoles()[0]);
         $form = $this->createForm(UserType::class, $user);
+        $form->remove('password');
+        //dd($this->isGranted('ROLE_ADMIN'));
+        if ( $this->IsGranted('ROLE_ADMIN')) {
+            $form->remove('newRole');
+        } else {
+            $form->remove('newRole');
+            $form->remove('currentRole');
+        }
         $form->handleRequest($request);
-        $piorUserRole = $user->getRoles()[0];
-        //dd($piorUserRole);
         
         if($form->isSubmitted() && $form->isValid()) {
-            //dd($form->get('newroles')->getData());
+            //dd($form->get('currentRole')->getData());
             // $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
-            if ($form->get('newroles')->getData() == 'idem') {
-                $user->setRoles($piorUserRole);
-            }
-            else {
-                $user->setRoles($form->get('newroles')->getData());
-            }
+            $user->setRoles($form->get('currentRole')->getData());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 
@@ -110,7 +112,7 @@ class HomeController extends AbstractController
         }
 
         return $this->render('home/modification.html.twig', [
-            "user" => $user,
+            'user' => $user,
             "form" => $form->createView()
         ]);
     }

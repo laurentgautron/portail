@@ -7,19 +7,19 @@
     <div class="row">
         <div class="col-md-6 mx-auto">
             <h1>modification utilisateur</h1>
-            {{ form_start(form) }}
-                {{ form_widget(form.nom) }}
-                {{ form_widget(form.prenom) }}
-                {{ form_widget(form.adresse) }}
-                {{ form_widget(form.codePostal) }}
-                {{ form_widget(form.ville) }}
-                {{ form_widget(form.email) }}
-                {{ form_widget(form.telephone) }}
+                {{ form_start(form) }}
+                {{ form_row(form.nom) }}
+                {{ form_row(form.prenom) }}
+                {{ form_row(form.adresse) }}
+                {{ form_row(form.codePostal) }}
+                {{ form_row(form.ville) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.telephone) }}
                 {% if is_granted('ROLE_ADMIN') %}
                     <p>role actuel: {{ user.roles[0] }}</p>
-                    {# {{ form_widget(form.newroles) }} #}
+                    <p>{{ form_row(form.currentRole) }}</p>
                 {% endif %}
-            {{ form_end(form) }}
+                {{ form_end(form) }}
             {# {{ include('layouts/partials/_form.html.twig', {'submitBottomText': 'modifier'}) }} #}
         </div>
     </div>

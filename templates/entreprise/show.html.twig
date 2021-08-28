@@ -1,0 +1,11 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block body %}
+    <h1>Liste des entreprisess</h1>
+    {% for entreprise in entreprises %}
+        <p class="d-flex">{{ entreprise.nom }}
+            <a href="{{ path('app_modification_entreprise', {id: entreprise.id}) }}" class="btn btn-primary mx-2">modifier</a>
+            <a href="{{ path('app_delete_entreprise', {id: entreprise.id}) }}" class="btn btn-danger mx-2">supprimer</a>
+        </p>
+    {% endfor %}
+{% endblock %}

@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="nextInfo mx-2">
-            <h2>Expériences:</h2>
+            <h2 class="exp">Expériences:</h2>
             <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary mb-2">Ajouter une expérience</a>
             <div class="containerExperience mb-1 px-2">
                 {% for experience in user.exp %}

@@ -3,11 +3,11 @@
 {% block title %}research{% endblock %}
 
 {% block body %}
-    <h1>Bonjour pour une recherche par nom</h1>
+    <h1>Bonjour pour une recherche par competence</h1>
     {{ form_start(form) }}
     {{ form_end(form) }}
-    {% if app.request.method == 'POST' and users | length == 0 %}
-        <h2>Pas de résultat pour la recherche !: ce nom n'existe pas</h2>
+    {% if app.request.method == 'POST' and competences | length == 0 %}
+        <h2>Pas de résultat pour la recherche: cette competence n'existe pas</h2>
     {% else %}
         {% for user in users %}
             <p>Nom: {{ user.nom }}</p>

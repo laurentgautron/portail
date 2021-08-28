@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\SearchType;
 use App\Entity\Competences;
 use App\Form\CompetencesType;
 use App\Entity\UserCompetences;
@@ -86,6 +87,33 @@ class CompetencesController extends AbstractController
         return $this->render('competences/modify.html.twig', [
             'form' => $form->createView(),
             'competence' => $competence
+        ]);
+    }
+
+    /**
+     * @Route("/search/competences", name="app_search_competences")
+     */
+    public function researchByName(Request $request, CompetencesRepository $competencesRepository, UserCompetencesRepository $usercompetencesRepository)
+    {
+        $form = $this->createForm(SearchType::class);
+
+        $form->handleRequest($request);
+        $competences = [];
+        $users = []; 
+        if ($form->isSubmitted() and $form->isValid()) {
+            $competences = $competencesRepository->findBynomcompetence($form->getData('nomcompetence'));
+            foreach($competences as $competence) {
+                $userCompetences = $usercompetencesRepository->searchComp($competence->getId());
+                foreach($userCompetences as $userCompetence){
+                    $users[] = $userCompetence->getUser();
+                }
+                //dd($users[0]->getId());
+            }
+        }
+        return $this->render('search/competences.html.twig', [
+            'form' => $form->createView(),
+            'competences' => $competences,
+            'users' => $users
         ]);
     }
 }

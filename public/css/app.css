@@ -69,17 +69,19 @@ hr {
 .item-modifications,
 .item-comp,
 .item-ent,
-.item-cat {
+.item-cat,
+.item-rech {
     display: none;
 }
 
 .list-modif:hover .item-modifications
- {
+.list-comp:hover .item-comp,
+.list-ent:hover .item-ent,
+.list-cat:hover .item-cat,
+.list-rech:hover .item-rech {
     display: block;
 }
 
-.list-comp:hover .item-comp,
-.list-ent:hover .item-ent,
-.list-cat:hover .item-cat {
-    display: block;
+.exp {
+    display: inline;
 }

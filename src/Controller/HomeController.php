@@ -147,21 +147,22 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/search", name="app_search")
+     * @Route("/search/name", name="app_search_name")
      */
-    public function research(Request $request, UserRepository $userRepository)
+    public function researchByName(Request $request, UserRepository $userRepository)
     {
-        $users = [];
         $form = $this->createForm(SearchType::class);
+
         $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $criteres = $form->getData();
-            $users = $userRepository->findBy($criteres);
+        //dd($form);
+        $users = [];
+        if ($form->isSubmitted() and $form->isValid()) {
+            $users = $userRepository->findByNom($form->getData('nom'));
+            //dd($users);
         }
-
+        //$users = $userRepository->findByUser();
         return $this->render('search/user.html.twig', [
-            'formResearch' => $form->createView(),
+            'form' => $form->createView(),
             'users' => $users
         ]);
     }

@@ -71,7 +71,7 @@ class HomeController extends AbstractController
                 $user->setDocumentFilename($newFilename);
             }
             $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
-            $user->setRoles($form->get('newRole')->getData());
+            $user->setRoles($form->get('role')->getData());
             $em->persist($user);
             $em->flush($user);
 
@@ -93,19 +93,11 @@ class HomeController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user);
         $form->remove('password');
-        //dd($this->isGranted('ROLE_ADMIN'));
-        // if ( $this->IsGranted('ROLE_ADMIN')) {
-        //     $form->remove('newRole');
-        // } else {
-        //     $form->remove('newRole');
-        //     $form->remove('currentRole');
-        // }
+    
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
-            //dd($form->get('currentRole')->getData());
-            // $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
-            $user->setRoles($form->get('currentRole')->getData());
+            $user->setRoles($form->get('role')->getData());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 

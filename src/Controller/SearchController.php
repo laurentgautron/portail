@@ -17,14 +17,15 @@ class SearchController extends AbstractController
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
-
+        $users = [];
         if($form->isSubmitted() && $form->isValid()) {
             $criteres = $form->getData();
             $users = $userRepository->searchUser($criteres);
         }
 
         return $this->render('search/user.html.twig', [
-            'formResearch' => $form->createView()
+            'formResearch' => $form->createView(),
+            'users' => $users
         ]);
     }
 }

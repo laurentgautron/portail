@@ -5,6 +5,11 @@
 {% block body %}
     {% if app.user and (app.user.id == user.id or (is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')))%}
     <h1 class='text-center text-primary'>{{ user.nom }} {{ user.prenom }}</h1>
+    {% if user.roles[0] == 'ROLE_CAND' %}
+        <h2>Candidat</h2>
+    {% elseif user.roles[0] == 'ROLE_COLL' %}
+        <h2>Collaborateur</h2>
+    {% endif %}
     <div class="informations d-flex">
         <div class="user-comp">
             <div class="coordonnees px-2">

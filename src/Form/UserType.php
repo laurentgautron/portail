@@ -58,7 +58,7 @@ class UserType extends AbstractType
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 $entity = $event->getData();
                 $form1 = $event->getForm();
-                $form1->add('currentRole', ChoiceType::class, [
+                $form1->add('role', ChoiceType::class, [
                         'mapped' => false,
                         'label' => 'rôle',
                         'choices' => [

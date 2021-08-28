@@ -40,6 +40,7 @@
                         <p>fonction: {{ experience.fonction }}</p>
                         <p>Réalisation: {{ experience.realisation }}</p>
                         <p>Lieu: {{ experience.lieu }}</p>
+                        <p>Entreprise: {{ experience.entreprise.getNom() }}</p>
                         <p>Contexte: {{ experience.contexte }}</p>
                         <p>Environnement technique: {{ experience.technique }}</p>
                         <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>

@@ -5,6 +5,8 @@ body, html {
 
 li {
     list-style-type: none;
+    color: #0d6efd;
+    cursor: pointer;
 }
 
 a {
@@ -62,4 +64,22 @@ form {
 hr {
     border-top: 2px solid black;
     background-color: black;
+}
+
+.item-modifications,
+.item-comp,
+.item-ent,
+.item-cat {
+    display: none;
+}
+
+.list-modif:hover .item-modifications
+ {
+    display: block;
+}
+
+.list-comp:hover .item-comp,
+.list-ent:hover .item-ent,
+.list-cat:hover .item-cat {
+    display: block;
 }

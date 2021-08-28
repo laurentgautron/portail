@@ -60,6 +60,7 @@ class ExperienceController extends AbstractController
 
         if ($form->isSubmitted() and $form->isValid()) {
             $userId = $experience->getUser()->getId();
+            //dd($experience->getEntreprise()->getNom());
             $em->persist($experience);
             $em->flush($experience);
 

@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Form\ExperienceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -15,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class UserType extends AbstractType
 {
@@ -28,37 +26,6 @@ class UserType extends AbstractType
             ->add('adresse')
             ->add('codePostal')
             ->add('ville')
-            ->add('newRole', ChoiceType::class, [
-                    'mapped' => false,
-                    'label' => 'rôle',
-                    'choices' => [
-                        '' => '',
-                        'Admin' => 'ROLE_ADMIN',
-                        'Collaborateur' => 'ROLE_COLL',
-                        'commercial' => 'ROLE_COM',
-                        'Candidat' => 'ROLE_CAND'
-                    ],
-                ]);
-        $builder
-            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-                //We retrieve the entity related to the form
-                $entity = $event->getData();
-                $form1 = $event->getForm();
-                //dd($entity->getRoles());
-                $form1->add('currentRole', ChoiceType::class, [
-                        'mapped' => false,
-                        'label' => 'rôle',
-                        'choices' => [
-                            'Admin' => 'ROLE_ADMIN',
-                            'Collaborateur' => 'ROLE_COLL',
-                            'commercial' => 'ROLE_COM',
-                            'Candidat' => 'ROLE_CAND'
-                        ],
-                        //'expanded' => true,
-                        'multiple' => false,
-                        'data' => $entity->getRoles()? $entity->getRoles()[0]:''
-                    ]);
-                })
             ->add('password', RepeatedType::class, [
                 'type'            => PasswordType::class,
                 'invalid_message' => 'Le mot de passe et la confirmation doivent être identique',
@@ -88,8 +55,25 @@ class UserType extends AbstractType
                     ])
                 ],
             ])
-            ->add('Enregistrer', SubmitType::class)
-        ;
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $entity = $event->getData();
+                $form1 = $event->getForm();
+                $form1->add('currentRole', ChoiceType::class, [
+                        'mapped' => false,
+                        'label' => 'rôle',
+                        'choices' => [
+                            '' => '',
+                            'Admin' => 'ROLE_ADMIN',
+                            'Collaborateur' => 'ROLE_COLL',
+                            'commercial' => 'ROLE_COM',
+                            'Candidat' => 'ROLE_CAND'
+                        ],
+                        //'expanded' => true,
+                        'multiple' => false,
+                        'data' => $entity->getRoles()? $entity->getRoles()[0]:'',
+                    ]);
+                })
+            ->add('Enregistrer', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

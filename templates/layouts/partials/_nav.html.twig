@@ -4,7 +4,28 @@
         {% if app.user %}
             <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
             <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Mon profil</a></li>
-            <li><a href="{{ path('app_mod') }}">Modifications</a></li>
+            <li class='list-modif'>Modifications
+                <ul class="item-modifications">
+                    <li class='list-comp'>Compétences
+                        <ul class='item-comp'>
+                            <li><a href="{{ path('app_add_competences') }}">Ajouter</a></li>
+                            <li><a href="{{ path('app_show_competences') }}">Modifier/Supprimer</a></li>
+                        </ul>
+                    </li>
+                    <li class='list-ent'>Entreprise
+                        <ul class='item-ent'>
+                            <li>Ajouter</li>
+                            <li>Modifier/Supprimer</li>
+                        </ul>
+                    </li>
+                    <li class='list-cat'>Catégories
+                        <ul class='item-cat'>
+                            <li>Ajouter</li>
+                            <li>Modifier/Supprimer</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
             <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
             <li><a href="{{ path('app_search') }}">Recherches</a></li>
         {% else %}

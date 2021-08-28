@@ -65,4 +65,27 @@ class CompetencesController extends AbstractController
 
         return $this->redirectToRoute('app_show_competences');
     }
+
+    /**
+     * @Route("/competences/modification/{id<[0-9]+>}", name="app_modification_competence")
+     */
+    public function modification(Request $request, Competences $competence, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(CompetencesType::class, $competence);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() and $form->isValid()) {
+            $em->persist($competence);
+            $em->flush();
+
+            return $this->redirectToRoute('app_show_competences');
+        }
+        
+
+        return $this->render('competences/modify.html.twig', [
+            'form' => $form->createView(),
+            'competence' => $competence
+        ]);
+    }
 }

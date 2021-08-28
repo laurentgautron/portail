@@ -4,8 +4,8 @@
     <h1>Liste des compétences</h1>
     {% for competence in competences %}
         <p class="d-flex">{{ competence.nomCompetence }}
-            <a href="{{ path('app_delete_competence', {id: competence.id}) }}" class="btn btn-primary mx-2">supprimer</a>
-            <a href="" class="btn btn-danger mx-2">modifier</a>
+            <a href="{{ path('app_modification_competence', {id: competence.id}) }}" class="btn btn-primary mx-2">modifier</a>
+            <a href="{{ path('app_delete_competence', {id: competence.id}) }}" class="btn btn-danger mx-2">supprimer</a>
         </p>
     {% endfor %}
 {% endblock %}

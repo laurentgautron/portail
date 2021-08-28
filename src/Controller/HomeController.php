@@ -45,7 +45,8 @@ class HomeController extends AbstractController
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
-        $form->remove('currentRole');
+        //$form->remove('currentRole');
+        //dd($form);
 
         $form->handleRequest($request);
         
@@ -93,12 +94,12 @@ class HomeController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->remove('password');
         //dd($this->isGranted('ROLE_ADMIN'));
-        if ( $this->IsGranted('ROLE_ADMIN')) {
-            $form->remove('newRole');
-        } else {
-            $form->remove('newRole');
-            $form->remove('currentRole');
-        }
+        // if ( $this->IsGranted('ROLE_ADMIN')) {
+        //     $form->remove('newRole');
+        // } else {
+        //     $form->remove('newRole');
+        //     $form->remove('currentRole');
+        // }
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
@@ -129,15 +130,6 @@ class HomeController extends AbstractController
         $this->addFlash('info', 'profil supprimé avec succés');
 
         return $this->redirectToRoute('app_home');   
-    }
-
-    /**
-     * @Route("/mod", name="app_mod", methods={"GET"})
-     * 
-     */
-    public function modif():Response
-    {
-        return $this->render('home/mod.html.twig');
     }
 
     /**

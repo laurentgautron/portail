@@ -1,0 +1,19 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}research{% endblock %}
+
+{% block body %}
+    <h1>Faites une recherche par compétence et par niveau</h1>
+    {{ form_start(form) }}
+    {{ form_end(form) }}
+    <p>(p.s. : si vous ne rentrez pas de niveau vous faites une rechercher seulement par compétence)</p>
+    {% if competences | length == 0 %}
+        <h2>Pas de résultat pour la recherche: cette competence n'existe pas</h2>
+    {% else %}
+        {% for user in users %}
+            <p>Nom: {{ user.nom }}</p>
+            <p>Prenom: {{ user.prenom }}</p>
+            <a href="{{ path('app_user_show', {id: user.id}) }}">Voir la fiche</a>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

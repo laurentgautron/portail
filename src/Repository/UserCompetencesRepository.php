@@ -22,11 +22,23 @@ class UserCompetencesRepository extends ServiceEntityRepository
      /**
       * @return UserCompetences[] Returns an array of UserCompetences objects
       */
-    public function searchComp($value)
+    public function searchComp($comp)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.competence = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('uc')
+            ->andWhere('uc.competence = :val')
+            ->setParameter('val', $comp)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function searchCompNiv($comp, $niv)
+    {
+        return $this->createQueryBuilder('uc')
+            ->Where('uc.competence = :val')
+            ->andWhere('uc.niveau = :niv')
+            ->setParameter('val',$comp)
+            ->setParameter('niv', $niv)
             ->getQuery()
             ->getResult()
         ;

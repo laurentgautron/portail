@@ -2,11 +2,11 @@
 
 namespace App\Form;
 
-use Doctrine\DBAL\Types\StringType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class SearchType extends AbstractType
 {
@@ -14,6 +14,9 @@ class SearchType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
+            ->add('niveau', IntegerType::class, [
+                'required' => false
+            ])
             ->add('rechercher', SubmitType::class)
             ;
     }

@@ -29,6 +29,11 @@ class Competences
      */
     private $comp;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="competence")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->comp = new ArrayCollection();
@@ -77,6 +82,18 @@ class Competences
                 $comp->setCompetence(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

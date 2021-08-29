@@ -2,15 +2,19 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimeStampable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\ExperienceRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Experience
 {
+    use TimeStampable;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

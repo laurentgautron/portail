@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\SearchType;
+use App\Repository\ExperienceRepository;
+use App\Repository\UserCompetencesRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class HomeController extends AbstractController
 {
@@ -24,7 +25,20 @@ class HomeController extends AbstractController
     public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
-        return $this->render('home/index.html.twig', compact('users'));
+        $usersChanged = [];
+        $usersNotChanged =[];
+        foreach($users as $user) {
+            if($user->getUpdatedAt() > $user->getLastLog()) {
+            $usersChanged[] = $user;
+            } else {
+            $usersNotChanged[] = $user;
+            }
+        }
+
+        return $this->render('home/index.html.twig', [
+            'usersNotChanged' => $usersNotChanged,
+            'usersChanged' => $usersChanged
+        ]);
     }
 
     /**
@@ -98,6 +112,7 @@ class HomeController extends AbstractController
         
         if($form->isSubmitted() && $form->isValid()) {
             $user->setRoles($form->get('role')->getData());
+            $user->setUpdatedAt(new \DateTimeImmutable());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 
@@ -115,8 +130,16 @@ class HomeController extends AbstractController
      * 
      * 
      */
-    public function delete(User $user, EntityManagerInterface $em): Response
+    public function delete(User $user, EntityManagerInterface $em, ExperienceRepository $experienceRepository, UserCompetencesRepository $userCompetencesRepository): Response
     {
+        $experiences = $experienceRepository->findByUser($user->getId());
+        $userCompetences = $userCompetencesRepository->findByUser($user->getId());
+        foreach($experiences as $experience) {
+            $em->remove($experience);
+            }
+            foreach($userCompetences as $userCompetence) {
+            $em->remove($userCompetence);
+            }
         $em->remove($user);
         $em->flush();
         $this->addFlash('info', 'profil supprimé avec succés');

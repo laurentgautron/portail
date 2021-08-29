@@ -17,7 +17,7 @@
                 {{ form_row(form.telephone) }}
                 {% if is_granted('ROLE_ADMIN') %}
                     <p>role actuel: {{ user.roles[0] }}</p>
-                    <p>{{ form_row(form.currentRole) }}</p>
+                    <p>{{ form_row(form.role) }}</p>
                 {% endif %}
                 {{ form_end(form) }}
             {# {{ include('layouts/partials/_form.html.twig', {'submitBottomText': 'modifier'}) }} #}

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimeStampable;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,6 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    use TimeStampable;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -76,16 +80,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $codePostal;
 
     /**
-     * @ORM\Column(type="datetime_immutable", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private $createdAt;
-
-     /**
-     * @ORM\Column(type="datetime_immutable", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private $updatedAt;
-
-    /**
      * @ORM\Column(type="string", length=10)
      * @Assert\NotBlank
      * message="vous devez renseigner un numéro de téléphone"
@@ -116,6 +110,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime")
      */
     private $lastLogin;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastLog;
 
     public function getDocumentFilename()
     {
@@ -272,42 +271,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updateTimestamp()
-    {
-        if ($this->getCreatedAt()=== null) {
-            $this->setCreatedAt(new \DateTimeImmutable());
-        }
-        $this->setUpdatedAt(new \DateTimeImmutable());
-    }
-
     public function getTelephone(): ?int
     {
         return $this->telephone;
@@ -404,8 +367,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __toString():string
+    public function getLastLog(): ?\DateTimeInterface
     {
-        return 'bonjour';
+        return $this->lastLogin;
+    }
+
+    public function setLastLog(\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
     }
 }

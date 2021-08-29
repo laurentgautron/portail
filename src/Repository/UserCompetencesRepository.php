@@ -44,15 +44,15 @@ class UserCompetencesRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?UserCompetences
+    public function searchCompUser($comp, $user)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('uc')
+            ->Where('uc.competence = :val')
+            ->andWhere('uc.user = :user')
+            ->setParameter('val',$comp)
+            ->setParameter('user', $user)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

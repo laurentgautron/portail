@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\SearchType;
+use App\Repository\CategoryRepository;
+use App\Repository\CompetencesRepository;
 use App\Repository\ExperienceRepository;
 use App\Repository\UserCompetencesRepository;
 use App\Repository\UserRepository;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HomeController extends AbstractController
@@ -22,32 +25,80 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="app_home")
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, RequestStack $requestStack, Request $request): Response
     {
         $users = $userRepository->findAll();
-        $usersChanged = [];
-        $usersNotChanged =[];
-        foreach($users as $user) {
-            if($user->getUpdatedAt() > $user->getLastLog()) {
-            $usersChanged[] = $user;
-            } else {
-            $usersNotChanged[] = $user;
-            }
-        }
+        // $currentUser = $this->getUser();
+        // if ($currentUser) {
+        //     $users = $userRepository->findAll();
+        //     $usersChanged = [];
+        //     $usersNotChanged =[];
+        //     foreach($users as $user) {
+        //         if($user->getUpdatedAt() > $currentUser->getLastLogin()) {
+        //         $usersChanged[] = $user;
+        //         } else {
+        //         $usersNotChanged[] = $user;
+        //         }
+        //     } 
+        // } else {
+        //     return $this->render('home/index.html.twig');
+        // }
+        
 
-        return $this->render('home/index.html.twig', [
-            'usersNotChanged' => $usersNotChanged,
-            'usersChanged' => $usersChanged
-        ]);
+        return $this->render('home/indextemp.html.twig',
+            // 'usersNotChanged' => $usersNotChanged,
+            // 'usersChanged' => $usersChanged
+            compact('users'));
     }
 
     /**
      * @Route("/user/{id<[0-9]+>}", name="app_user_show", methods={"GET"})
      *
      */
-    public function show(User $user): Response
+    public function show(User $user, UserCompetencesRepository $userCompetencesRepository, CompetencesRepository $competencesRepository, CategoryRepository $categoryRepository): Response
     {
-        return $this->render('home/show.html.twig', compact('user'));
+        $todisplay = [];
+        $competences = $userCompetencesRepository->findByUser($user->getId());
+        foreach($competences as $competence) {
+            $competencesId[] = $competence->getCompetence()->getId();
+        }
+        $categories = $categoryRepository->findAll();
+        foreach($categories as $category) {
+            $cat = $category->getId();
+            foreach($competencesId as $competenceId) {
+                $categoryIdForUser = $competencesRepository->findById($competenceId)[0]->getCategory()->getId();
+                if ($categoryIdForUser == $cat) {
+                    $todisplay[$cat][] = $competenceId;
+                }
+            }
+        }
+        $cates = [];
+        $lesCompetencesUser = [];
+        //dd($todisplay);
+        foreach($todisplay as $key => $values) {
+            //dd($key);
+            //dd($values);
+            $cates = $categoryRepository->findById($key)[0]->getNom();
+            //dd($cates);
+            //dd($values);
+            foreach($values as $value) {
+                //dd($value);
+                    $nomComp = $competencesRepository->findById($value)[0]->getNomcompetence();
+                    $niveau = $userCompetencesRepository->searchCompUser($value, $user)[0]->getNiveau();
+                    $appetence = $userCompetencesRepository->searchCompUser($value, $user)[0]->getAppetence();
+                    //dd($niveau);
+                    $lesCompetencesUser[$cates][] = [$nomComp, $niveau, $appetence];
+                }
+        }
+        dd($lesCompetencesUser);
+        // comps recherche par user et colmpetencesID
+        //dd($cates);
+        //dd(array_keys($todisplay));
+        return $this->render('home/show.html.twig', [
+            'cates' => $cates,
+            '$comps' => $comps,
+            'user' => $user
+        ]);
     }
 
 
@@ -112,7 +163,7 @@ class HomeController extends AbstractController
         
         if($form->isSubmitted() && $form->isValid()) {
             $user->setRoles($form->get('role')->getData());
-            $user->setUpdatedAt(new \DateTimeImmutable());
+            //$user->setUpdatedAt(new \DateTimeImmutable());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 
@@ -175,6 +226,7 @@ class HomeController extends AbstractController
     public function researchByName(Request $request, UserRepository $userRepository)
     {
         $form = $this->createForm(SearchType::class);
+        $form->remove('niveau');
 
         $form->handleRequest($request);
         //dd($form);

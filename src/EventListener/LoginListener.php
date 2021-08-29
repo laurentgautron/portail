@@ -19,6 +19,7 @@ class LoginListener
     {
         $user = $authenticationSuccessEvent->getAuthenticationToken()->getUser();
         $user->setLastLogin(new \DateTime());
+        //dd($user);
         $this->em->persist($user);
         $this->em->flush();
     }

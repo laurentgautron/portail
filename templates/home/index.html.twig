@@ -4,7 +4,7 @@
 
 {% block body %}
     {% if app.user %}
-        <p>{{ app.user.nom }} déconnecté le :{{ app.user.lastLog |date('Y/m/d H:m') }}</p>
+        <p>{{ app.user.nom }} connecté le :{{ app.user.lastLog |date('Y/m/d H:m:s') }}</p>
         <h1>Bonjour portail</h1>
         <div class="usersChanged">
             <h2>{{ usersChanged | length }} utilisateurs modifiés depuis la dernière connexion</h2>

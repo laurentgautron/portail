@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\UserCompetences;
 use App\Form\UserCompetencesType;
+use App\Repository\UserCompetencesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,29 @@ class UserCompetencesController extends AbstractController
         //dd($user->getId());
         return $this->render('user_competences/addCompetences.html.twig', [
             'addUserCompetenceForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/user/{id<[0-9]+>}/{user<[0-9]+>}/modify", name="app_competences_modify")
+     */
+    public function modify(Request $request, UserCompetences $userCompetence, EntityManagerInterface $em)
+    {
+        //dd($userCompetence);
+        $form = $this->createForm(UserCompetencesType::class, $userCompetence);
+        $form->remove('competence');
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() and $form->isValid()) {
+            $em->persist($userCompetence);
+            $em->flush();
+            return $this->redirectToRoute('app_user_show', ['id' => $userCompetence->getUser()->getId()]);
+        }
+
+        return $this->render('user_competences/modify.html.twig', [
+            'form' => $form->createView(),
+            'nomCompetence' => $userCompetence->getCompetence()->getNomcompetence()
         ]);
     }
 }

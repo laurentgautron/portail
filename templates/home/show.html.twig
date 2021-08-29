@@ -59,14 +59,17 @@
                 {% endfor %}
             </div>
             <div class="competences px-2">
-                    <h2>Compétences:</h2>
-                    {% for competence in user.userComp %}
-                        <p>Competence: {{ competence.competence.nomCompetence }}</p>
-                        <p>niveau: {{ competence.niveau }}</p>
-                        <p>Appetence: {{ competence.appetence }}</p>
-                        <hr>
+                    <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
+                    {% for cate in cates %}
+                        <p>{{ cate }}</p>
+                        {# {% for comp in comps %}
+                            <p>Competence: {{ comp.competence.nomCompetence }}</p>
+                            <p>niveau: {{ comp.niveau }}</p>
+                            <p>Appetence: {{ competence.appetence }}</p>
+                            <a href="{{ path('app_competences_modify', { id: competence.id, user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
+                            <hr>
+                        {% endfor %} #}
                     {% endfor %}
-                    <a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
                 </div>
         </div>
     </div>

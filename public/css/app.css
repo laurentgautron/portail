@@ -82,6 +82,7 @@ hr {
     display: block;
 }
 
-.exp {
+.exp,
+.comp {
     display: inline;
 }

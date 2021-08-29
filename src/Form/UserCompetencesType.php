@@ -15,12 +15,12 @@ class UserCompetencesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('niveau')
-            ->add('appetence')
             ->add('competence', EntityType::class, [
                 'class' => Competences::class,
                 'choice_label' => 'nomCompetence'
             ])
+            ->add('niveau')
+            ->add('appetence')
             ->add('Ajouter', SubmitType::class)
         ;
     }

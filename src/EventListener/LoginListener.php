@@ -16,10 +16,6 @@ class LoginListener
 
     public function onSecurityAuthenticationSuccess(AuthenticationEvent $authenticationSuccessEvent)
     {
-        $user = $authenticationSuccessEvent->getAuthenticationToken()->getUser();
-        $user->setLastLogin(new \DateTime());
-        //dd($user);
-        $this->em->persist($user);
-        $this->em->flush();
+        
     }
 }

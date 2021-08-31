@@ -110,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="datetime")
      */
-    private $lastLogout;
+    private $lastLog;
 
     public function getDocumentFilename()
     {
@@ -354,12 +354,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getLastLog(): ?\DateTimeInterface
     {
-        return $this->lastLogin;
+        return $this->lastLog;
     }
 
-    public function setLastLog(\DateTimeInterface $lastLogin): self
+    public function setLastLog(\DateTimeInterface $lastLog): self
     {
-        $this->lastLogin = $lastLogin;
+        $this->lastLog = $lastLog;
 
         return $this;
     }

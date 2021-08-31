@@ -29,6 +29,11 @@ class Category
      */
     private $competence;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $bydefault;
+
     public function __construct()
     {
         $this->competence = new ArrayCollection();
@@ -79,5 +84,22 @@ class Category
         }
 
         return $this;
+    }
+
+    public function getBydefault(): ?bool
+    {
+        return $this->bydefault;
+    }
+
+    public function setBydefault(bool $bydefault): self
+    {
+        $this->bydefault = $bydefault;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->nom;
     }
 }

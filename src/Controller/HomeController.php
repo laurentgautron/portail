@@ -58,6 +58,7 @@ class HomeController extends AbstractController
     public function show(User $user, UserCompetencesRepository $userCompetencesRepository, CompetencesRepository $competencesRepository, CategoryRepository $categoryRepository): Response
     {
         $todisplay = [];
+        $competencesId = [];
         $competences = $userCompetencesRepository->findByUser($user->getId());
         foreach($competences as $competence) {
             $competencesId[] = $competence->getCompetence()->getId();
@@ -86,17 +87,17 @@ class HomeController extends AbstractController
                     $nomComp = $competencesRepository->findById($value)[0]->getNomcompetence();
                     $niveau = $userCompetencesRepository->searchCompUser($value, $user)[0]->getNiveau();
                     $appetence = $userCompetencesRepository->searchCompUser($value, $user)[0]->getAppetence();
+                    $idcomp = $userCompetencesRepository->searchCompUser($value, $user)[0]->getId();
                     //dd($niveau);
-                    $lesCompetencesUser[$cates][] = [$nomComp, $niveau, $appetence];
+                    $lesCompetencesUser[$cates][] = [$nomComp, $niveau, $appetence, $idcomp];
                 }
         }
-        dd($lesCompetencesUser);
+        //dd($lesCompetencesUser);
         // comps recherche par user et colmpetencesID
         //dd($cates);
         //dd(array_keys($todisplay));
         return $this->render('home/show.html.twig', [
-            'cates' => $cates,
-            '$comps' => $comps,
+            'lescompetences' => $lesCompetencesUser,
             'user' => $user
         ]);
     }

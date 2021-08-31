@@ -1,11 +1,8 @@
 {% extends "layouts/base.html.twig" %}
 
 {% block body %}
-    <h1>Liste des categoriess</h1>
-    {% for categorie in categories %}
-        <p class="d-flex">{{ categorie.nom }}
-            <a href="{{ path('app_modification_category', {id: categorie.id}) }}" class="btn btn-primary mx-2">modifier</a>
-            <a href="{{ path('app_delete_category', {id: categorie.id}) }}" class="btn btn-danger mx-2">supprimer</a>
-        </p>
-    {% endfor %}
+    <h1>Liste des categories</h1>
+    {{  form_start(form) }}
+        {{ form(form) }}
+    {{ form_end(form) }}
 {% endblock %}

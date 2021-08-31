@@ -60,15 +60,15 @@
             </div>
             <div class="competences px-2">
                     <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
-                    {% for cate in cates %}
+                    {% for cate, competences in lescompetences %}
                         <p>{{ cate }}</p>
-                        {# {% for comp in comps %}
-                            <p>Competence: {{ comp.competence.nomCompetence }}</p>
-                            <p>niveau: {{ comp.niveau }}</p>
-                            <p>Appetence: {{ competence.appetence }}</p>
-                            <a href="{{ path('app_competences_modify', { id: competence.id, user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
+                        {% for competence in competences %}
+                            <p>Competence: {{ competence[0] }}</p>
+                            <p>niveau: {{ competence[1] }}</p>
+                            <p>Appetence: {{ competence[2] }}</p>
+                            <a href="{{ path('app_competences_modify', { id: competence[3], user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
                             <hr>
-                        {% endfor %} #}
+                        {% endfor %}
                     {% endfor %}
                 </div>
         </div>

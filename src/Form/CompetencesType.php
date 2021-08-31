@@ -14,9 +14,6 @@ class CompetencesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('Competences', EntityType::class, [
-            //     'class' => Competences::class
-            // ]);
             ->add('nomcompetence')
             ->add('submit', SubmitType::class, [
                 'label' => 'ajouter la competence'

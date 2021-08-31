@@ -74,7 +74,7 @@ hr {
     display: none;
 }
 
-.list-modif:hover .item-modifications
+.list-modif:hover .item-modifications,
 .list-comp:hover .item-comp,
 .list-ent:hover .item-ent,
 .list-cat:hover .item-cat,

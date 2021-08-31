@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CategoryController extends AbstractController
 {
@@ -26,11 +27,29 @@ class CategoryController extends AbstractController
     /**
      * @Route("/category/show", name="app_show_category")
      */
-    public function show(CategoryRepository $categoryRepository)
+    public function show(Request $request, CategoryRepository $categoryRepository)
     {
-        $categories = $categoryRepository->findAll();
+        $form = $this->createForm(CategoryType::class);
+        
 
-        return $this->render('category/show.html.twig', compact('categories'));
+        $form->add('submit1', SubmitType::class, [
+            'label' => 'modifier',
+        ]);
+        
+        $form->handleRequest($request);
+        //dd($form->get('submit')->getName());
+    
+
+        if ($form->isSubmitted() and $form->isValid()) {
+            dd($form->get('submit')->isClicked());
+            
+            $modif = $form->get('submit1')->getData();
+            $form->get('submit1')->getName();
+        }
+
+        return $this->render('category/show.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**

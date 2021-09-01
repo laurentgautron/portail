@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use App\Repository\CompetencesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,11 +30,15 @@ class CategoryController extends AbstractController
      */
     public function show(Request $request, CategoryRepository $categoryRepository)
     {
-        $form = $this->createForm(CategoryType::class);
+        $form = $this->createForm(CategoryType::class, null, ['category' => false]);
         
 
-        $form->add('submit1', SubmitType::class, [
-            'label' => 'modifier',
+        $form->add('modification', SubmitType::class, [
+            'label' => 'Modifier',
+        ]);
+
+        $form->add('suppression', SubmitType::class, [
+            'label'  => 'Supprimer'
         ]);
         
         $form->handleRequest($request);
@@ -41,22 +46,34 @@ class CategoryController extends AbstractController
     
 
         if ($form->isSubmitted() and $form->isValid()) {
-            dd($form->get('submit')->isClicked());
-            
-            $modif = $form->get('submit1')->getData();
-            $form->get('submit1')->getName();
+            $categoryId = $categoryRepository->findByNom($form->getData()->getNom())[0]->getId();
+            if ($form->get('suppression')->isClicked() and $form->get('nom')->getData()->getBydefault()) {
+                $this->addFlash('info', 'c\'est la catégorie par défaut, vous devez la changer avant de la supprimer');
+            } elseif ($form->get('suppression')->isClicked()) {
+                return $this->redirectToRoute('app_delete_category', ['id' => $categoryId]);
+            } else {
+                return $this->redirectToRoute('app_modification_category', ['id' => $categoryId]);
+            }
         }
-
         return $this->render('category/show.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
     /**
      * @Route("/category/delete/{id<[0-9]+>}", name="app_delete_category")
      */
-    public function delete(Category $category, EntityManagerInterface $em)
-    {
+    public function delete(Category $category, EntityManagerInterface $em, CompetencesRepository $competencesRepository, CategoryRepository $categoryRepository)
+    {   
+        $competences = $competencesRepository->findByCategory($category->getId());
+        $byDefaultId = $categoryRepository->findByBydefault(1)[0];
+        //dd($byDefaultId);
+        //dd($competences);
+        foreach($competences as $competence) {
+            $competence->setCategory($byDefaultId);
+            $em->persist($competence);
+            $em->flush();
+        }
         $em->remove($category);
         $em->flush();
 
@@ -68,7 +85,7 @@ class CategoryController extends AbstractController
      */
     public function modify(Request $request, Category $category, EntityManagerInterface $em)
     {
-        $form = $this->createForm(CategoryType::class, $category);
+        $form = $this->createForm(CategoryType::class, $category, ['category' =>true]);
 
         $form->handleRequest($request);
 

@@ -28,27 +28,25 @@ class HomeController extends AbstractController
     public function index(UserRepository $userRepository, RequestStack $requestStack, Request $request): Response
     {
         $users = $userRepository->findAll();
-        // $currentUser = $this->getUser();
-        // if ($currentUser) {
-        //     $users = $userRepository->findAll();
-        //     $usersChanged = [];
-        //     $usersNotChanged =[];
-        //     foreach($users as $user) {
-        //         if($user->getUpdatedAt() > $currentUser->getLastLogin()) {
-        //         $usersChanged[] = $user;
-        //         } else {
-        //         $usersNotChanged[] = $user;
-        //         }
-        //     } 
-        // } else {
-        //     return $this->render('home/index.html.twig');
-        // }
+        $userConnected = $this->getUser();
+        //dd($userConnected->getLastLog());
+        $modifiedUsers = [];
+        if ($userConnected) {
+            foreach($users as $user) {
+                $updateUser = $user->getUpdatedAt() > $userConnected->getLastLog();
+                $entrepriseUpdateUser = $user->getExp();
+                //dd($entrepriseUpdateUser[0]);
+                if ($userConnected->getLastLog() and $user->getUpdatedAt() > $userConnected->getLastLog()) {
+                    $modifiedUsers[] = $user;
+                }
+            }
+        }
         
 
-        return $this->render('home/indextemp.html.twig',
-            // 'usersNotChanged' => $usersNotChanged,
-            // 'usersChanged' => $usersChanged
-            compact('users'));
+        return $this->render('home/index.html.twig',[
+            'users' => $users,
+            'modifiedUsers' => $modifiedUsers
+            ]);
     }
 
     /**

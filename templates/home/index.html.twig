@@ -4,19 +4,20 @@
 
 {% block body %}
     {% if app.user %}
+    <pre>
+        {{ dump(app.user) }}
+    </pre>
         <p>{{ app.user.nom }} connecté le :{{ app.user.lastLog |date('Y/m/d H:m:s') }}</p>
         <h1>Bonjour portail</h1>
         <div class="usersChanged">
-            <h2>{{ usersChanged | length }} utilisateurs modifiés depuis la dernière connexion</h2>
-            {% for userChanged in usersChanged %}
-                <a href="{{ path('app_user_show', { id: userChanged.id }) }}" class='link-primary' style="color:red;"><span>{{ userChanged.nom }}</span><span>{{ userChanged.prenom }}</span></a>
+            <h2>{{ modifiedUsers | length }} utilisateurs modifiés depuis la dernière connexion</h2>
+            {% for modifiedUser in modifiedUsers %}
+                <a href="{{ path('app_user_show', { id: modifiedUser.id }) }}" class='link-primary' style="color:red;"><span>{{ modifiedUser.nom }}</span><span>{{ modifiedUser.prenom }}</span></a>
             {% endfor %}
         </div>
-        <div class="usersNotChanged">
-            {% for userNotChanged in usersNotChanged %}
-                <a href="{{ path('app_user_show', { id: userNotChanged.id }) }}" class='link-primary'><span>{{ userNotChanged.nom }}</span><span>{{ userNotChanged.prenom }}</span></a>
-            {% endfor %}
-        </div>
+        {% for user in users %}
+            <p><a href="{{ path('app_user_show', { id: user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></p>
+        {% endfor %}
     {% else %}
         <p>Bienvenu(e) dans le portail de compétence: veuiilez vous connecter<p>
     {% endif %}

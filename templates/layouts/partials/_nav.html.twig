@@ -3,7 +3,12 @@
     <ul class="d-flex justify-content-between">
         {% if app.user %}
             <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
-            <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Mon profil</a></li>
+            <li class="deroulant">Mon profil
+                <ul class="sous">
+                    <a href="{{ path('app_user_show', {id: app.user.id}) }}">Changer mon profil</a>
+                    <li><a href="{{ path('app_reset_password') }}">Changer mot de passe</a></li>
+                </ul>
+            </li>
             <li class='deroulant'>Modifications
                 <ul class="sous">
                     <li class='deroulant'>Compétences

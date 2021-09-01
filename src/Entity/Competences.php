@@ -14,8 +14,6 @@ use Doctrine\Common\Collections\Collection;
  */
 class Competences
 {
-    use TimeStampable;
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

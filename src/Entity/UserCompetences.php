@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimeStampable;
 use App\Repository\UserCompetencesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserCompetences
 {
+
+    use TimeStampable;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

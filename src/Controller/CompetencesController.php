@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Form\SearchType;
 use App\Entity\Competences;
 use App\Form\CompetencesType;
 use App\Entity\UserCompetences;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CompetencesRepository;
 use App\Repository\UserCompetencesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class CompetencesController extends AbstractController
 {
@@ -25,6 +29,18 @@ class CompetencesController extends AbstractController
         $competence = new Competences;
 
         $form = $this->createForm(CompetencesType::class);
+        $form->add('category', EntityType::class, [
+            'label' => 'categorie',
+            'class' => Category::class,
+            'query_builder' => function (CategoryRepository $cat) {
+                return $cat->createQueryBuilder('cat')
+                    ->orderBy('cat.bydefault', 'DESC');
+                },
+            ]);
+
+        $form->add('ajout', SubmitType::class, [
+            'label' => 'ajouter'
+        ]);
 
         $form->handleRequest($request);
 

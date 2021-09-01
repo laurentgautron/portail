@@ -1,34 +1,34 @@
-<aside class='mx-0 navigation'>
+<header class='mx-0 d-flex navigation'>
     <h2><a href="{{ path('app_home') }}" class="tex-muted text-center">Portail de compétences</a></h2>
-    <ul>
+    <ul class="d-flex justify-content-between">
         {% if app.user %}
             <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
             <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Mon profil</a></li>
-            <li class='list-modif'>Modifications
-                <ul class="item-modifications">
-                    <li class='list-comp'>Compétences
-                        <ul class='item-comp'>
+            <li class='deroulant'>Modifications
+                <ul class="sous">
+                    <li class='deroulant'>Compétences
+                        <ul class='sous'>
                             <li><a href="{{ path('app_add_competences') }}">Ajouter</a></li>
                             <li><a href="{{ path('app_show_competences') }}">Modifier/Supprimer</a></li>
                         </ul>
                     </li>
-                    <li class='list-ent'>Entreprise
-                        <ul class='item-ent'>
+                    <li class='deroulant'>Entreprise
+                        <ul class='sous'>
                             <li><a href="{{ path('app_add_entreprise') }}">Ajouter</a></li>
                             <li><a href="{{ path('app_show_entreprise') }}">Modifier/Supprimer</a></li>
                         </ul>
                     </li>
-                    <li class='list-cat'>Catégories
-                        <ul class='item-cat'>
+                    <li class='deroulant'>Catégories
+                        <ul class='sous'>
                             <li><a href="{{ path('app_add_category') }}">Ajouter</a></li>
-                            <li><a href="{{ path('app_show_category') }}">Modifier/Supprimer</a></li>
+                            <li><a href="{{ path('app_show_category') }}">Autres</a></li>
                         </ul>
                     </li>
                 </ul>
             </li>
             <li><a href="{{ path('app_logout')}}">Se déconnecter</a></li>
-            <li class='list-rech'>Recherches
-                <ul class='item-rech'>
+            <li class='deroulant'>Recherches
+                <ul class='sous'>
                     <li><a href="{{ path('app_search_name') }}">par Nom</a></li>
                     <li><a href="{{ path('app_search_competences') }}">par Compétences</a></li>
                     <li><a href="">par compétences préférées</a></li>
@@ -38,4 +38,4 @@
             <li><a href="{{ path('app_login') }}">Se connecter</a></li>
         {% endif %}
     </ul>
-</aside>
+</header>

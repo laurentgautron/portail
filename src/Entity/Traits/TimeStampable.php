@@ -39,7 +39,7 @@ trait TimeStampable
     }
 
     /**
-     * @ORM\PrePersist
+     *
      * @ORM\PreUpdate
      */
     public function updateTimestamp()

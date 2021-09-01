@@ -1,88 +1,95 @@
-body, html {
-    height: 100%;
-    width: 100vw;
+body,
+html {
+	height: 100%;
+	width: 100vw;
 }
 
 li {
-    list-style-type: none;
-    color: #0d6efd;
-    cursor: pointer;
+	list-style-type: none;
+	color: #0d6efd;
+	cursor: pointer;
+	text-align: left;
 }
 
 a {
-    text-decoration: none;
+	text-decoration: none;
 }
 
 .containerExperience {
-    height: 46vh;
-    width: 70vw;
-    overflow: scroll;
+	height: 46vh;
+	width: 70vw;
+	overflow: scroll;
 }
 
 .utilisateur {
-    height: 50vh;
-    width: 30%;
+	height: 50vh;
+	width: 30%;
 }
 
 main {
-    max-width: 100%;
-    width: 100%;
-    height: 80%;
+	max-width: 100%;
+	width: 100%;
+	height: 80%;
 }
 
 form {
-    width: 70%;
+	width: 70%;
 }
 
 .competences {
-    height: 35%;
-    overflow: scroll;
+	height: 35%;
+	overflow: scroll;
 }
 
 .navigation {
-    width: 20%;
+	width: 100%;
 }
 
 .mainContainer {
-    max-width: 100%;
+	max-width: 100%;
 }
 
 .informations {
-    width: 100%;
-    height: 75vh;
+	width: 100%;
+	height: 75vh;
 }
 
 .user-comp {
-    height: 78%;
+	height: 78%;
 }
-.containerExperience, 
+.containerExperience,
 .competences,
 .coordonnees {
-    border: 2px solid black;
+	border: 2px solid black;
 }
 
 hr {
-    border-top: 2px solid black;
-    background-color: black;
+	border-top: 2px solid black;
+	background-color: black;
 }
 
-.item-modifications,
-.item-comp,
-.item-ent,
-.item-cat,
-.item-rech {
-    display: none;
+.sous {
+	display: none;
 }
 
-.list-modif:hover .item-modifications,
-.list-comp:hover .item-comp,
-.list-ent:hover .item-ent,
-.list-cat:hover .item-cat,
-.list-rech:hover .item-rech {
-    display: block;
+.sous {
+    z-index: 345;
+    width: 100%;
+	/* position: absolute; */
+}
+
+.deroulant:hover > .sous {
+	display: block;
+}
+.deroulant + .sous {
+    color: red;
 }
 
 .exp,
 .comp {
-    display: inline;
+	display: inline;
+}
+
+header ul {
+	width: 70%;
 }

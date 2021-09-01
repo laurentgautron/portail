@@ -7,7 +7,9 @@
     <pre>
         {{ dump(app.user) }}
     </pre>
-        <p>{{ app.user.nom }} connecté le :{{ app.user.lastLog |date('Y/m/d H:m:s') }}</p>
+        {% if userLastConnexion %}
+        <p>{{ app.user.nom }} connecté le :{{ userLastConnexion |date('Y/m/d H:m:s') }}</p>
+        {% endif %}
         <h1>Bonjour portail</h1>
         <div class="usersChanged">
             <h2>{{ modifiedUsers | length }} utilisateurs modifiés depuis la dernière connexion</h2>

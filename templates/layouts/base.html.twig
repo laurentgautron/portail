@@ -15,16 +15,13 @@
     </head>
     <body>
         {{ include('layouts/partials/_flash_messages.html.twig') }}
-        <div class="mainContainer d-flex mx-1">
+        <div class="mainContainer mx-1">
             {{ include('layouts/partials/_nav.html.twig') }}
+        </div>
             <main class='mx-1'>
                 {% block body %}
                     <h1>Bienvenue sur le portail de compétences</h1>
                 {% endblock %}
             </main>
-        </div>
-        
-        
-        
     </body>
 </html>

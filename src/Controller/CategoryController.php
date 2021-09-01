@@ -28,7 +28,7 @@ class CategoryController extends AbstractController
     /**
      * @Route("/category/show", name="app_show_category")
      */
-    public function show(Request $request, CategoryRepository $categoryRepository)
+    public function show(Request $request, CategoryRepository $categoryRepository, EntityManagerInterface $em)
     {
         $form = $this->createForm(CategoryType::class, null, ['category' => false]);
         
@@ -40,19 +40,32 @@ class CategoryController extends AbstractController
         $form->add('suppression', SubmitType::class, [
             'label'  => 'Supprimer'
         ]);
+
+        $form->add('bydefault', SubmitType::class, [
+            'label'  => 'choisr par défaut'
+        ]);
         
         $form->handleRequest($request);
         //dd($form->get('submit')->getName());
     
 
         if ($form->isSubmitted() and $form->isValid()) {
-            $categoryId = $categoryRepository->findByNom($form->getData()->getNom())[0]->getId();
+            $category = $categoryRepository->findByNom($form->getData()->getNom())[0];
             if ($form->get('suppression')->isClicked() and $form->get('nom')->getData()->getBydefault()) {
                 $this->addFlash('info', 'c\'est la catégorie par défaut, vous devez la changer avant de la supprimer');
             } elseif ($form->get('suppression')->isClicked()) {
-                return $this->redirectToRoute('app_delete_category', ['id' => $categoryId]);
-            } else {
-                return $this->redirectToRoute('app_modification_category', ['id' => $categoryId]);
+                return $this->redirectToRoute('app_delete_category', ['id' => $category->getId()]);
+            } elseif ($form->get('bydefault')->isClicked()) {
+                $byDefaultCategory = $categoryRepository->findByBydefault(1)[0];
+                //dd($byDefaultCategory);
+                $byDefaultCategory->setBydefault(0);
+                $category->setBydefault(1);
+                $em->persist($byDefaultCategory);
+                $em->persist($category);
+                $em->flush();
+            }
+            else {
+                return $this->redirectToRoute('app_modification_category', ['id' => $categoryId->getId()]);
             }
         }
         return $this->render('category/show.html.twig', [

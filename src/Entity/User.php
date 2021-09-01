@@ -106,11 +106,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $userComp;
 
-
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private $lastLog;
+    private $logoutAt;
 
     public function getDocumentFilename()
     {
@@ -351,16 +350,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-    public function getLastLog(): ?\DateTimeInterface
+    public function getLogoutAt(): ?\DateTimeImmutable
     {
-        return $this->lastLog;
+        return $this->logoutAt;
     }
 
-    public function setLastLog(\DateTimeInterface $lastLog): self
+    public function setLogoutAt(?\DateTimeImmutable $logoutAt): self
     {
-        $this->lastLog = $lastLog;
+        $this->logoutAt = $logoutAt;
 
         return $this;
     }
+
 }

@@ -8,6 +8,7 @@ use App\Form\SearchType;
 use App\Repository\CategoryRepository;
 use App\Repository\CompetencesRepository;
 use App\Repository\ExperienceRepository;
+use App\Repository\LogoutRepository;
 use App\Repository\UserCompetencesRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,27 +26,14 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="app_home")
      */
-    public function index(UserRepository $userRepository, RequestStack $requestStack, Request $request): Response
+    public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
-        $userConnected = $this->getUser();
-        //dd($userConnected->getLastLog());
-        $modifiedUsers = [];
-        if ($userConnected) {
-            foreach($users as $user) {
-                $updateUser = $user->getUpdatedAt() > $userConnected->getLastLog();
-                $entrepriseUpdateUser = $user->getExp();
-                //dd($entrepriseUpdateUser[0]);
-                if ($userConnected->getLastLog() and $user->getUpdatedAt() > $userConnected->getLastLog()) {
-                    $modifiedUsers[] = $user;
-                }
-            }
-        }
+        
         
 
-        return $this->render('home/index.html.twig',[
-            'users' => $users,
-            'modifiedUsers' => $modifiedUsers
+        return $this->render('home/indextemp.html.twig',[
+            'users' => $users
             ]);
     }
 
@@ -155,6 +143,8 @@ class HomeController extends AbstractController
      */
     public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder): Response
     {
+        $userLogout = $user->getLogoutAt();
+        //dd($userLogout);
         $form = $this->createForm(UserType::class, $user);
         $form->remove('password');
     

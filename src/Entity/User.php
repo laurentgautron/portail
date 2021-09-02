@@ -111,6 +111,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $logoutAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Lastconnexion::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $lastconnexion;
+
     public function getDocumentFilename()
     {
         return $this->documentFilename;
@@ -358,6 +363,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLogoutAt(?\DateTimeImmutable $logoutAt): self
     {
         $this->logoutAt = $logoutAt;
+
+        return $this;
+    }
+
+    public function getLastconnexion(): ?Lastconnexion
+    {
+        return $this->lastconnexion;
+    }
+
+    public function setLastconnexion(?Lastconnexion $lastconnexion): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($lastconnexion === null && $this->lastconnexion !== null) {
+            $this->lastconnexion->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($lastconnexion !== null && $lastconnexion->getUser() !== $this) {
+            $lastconnexion->setUser($this);
+        }
+
+        $this->lastconnexion = $lastconnexion;
 
         return $this;
     }

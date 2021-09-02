@@ -2,20 +2,37 @@
 
 namespace App\EventListener;
 
+use App\Entity\Lastconnexion;
+use App\Repository\LastconnexionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 
 class LogoutListener
 {
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, LastconnexionRepository $lastconnexionRepository)
     {
         $this->em = $em;
+        $this->lastconnexionRepository = $lastconnexionRepository;
     }
 
     public function __invoke(LogoutEvent $logoutEvent)
     {
         $user = $logoutEvent->getToken()->getUser();
-        $user->setLogoutAt(new \DateTimeImmutable());
+        $last = $this->lastconnexionRepository->findByUser($user->getId());
+        //dd($last == []);
+        if ($last == []) {
+            //dd('mince');
+            $thelast = new Lastconnexion;
+            $thelast->setUser($user);
+            $thelast->setLasLogoutAt(new \DateTimeImmutable());
+            $this->em->persist($thelast);
+            //$this->em->flush();
+        } else {
+            //dd('youpi');
+            $last[0]->setLasLogoutAt(new \DateTimeImmutable());
+        }
+        
+        //dd($user->setLastconnexion);
         $uow = $this->em->getUnitOfWork();
         $this->em->persist($user);
         $uow->computeChangeSets();

@@ -16,7 +16,11 @@ class LogoutListener
     {
         $user = $logoutEvent->getToken()->getUser();
         $user->setLogoutAt(new \DateTimeImmutable());
+        $uow = $this->em->getUnitOfWork();
         $this->em->persist($user);
+        $uow->computeChangeSets();
+        $changeset = $uow->getEntityChangeSet($user);
+        //dd($changeset);
         $this->em->flush();
     }
 }

@@ -16,6 +16,10 @@ a {
 	color: #0d6efd;
 }
 
+header h2 > a {
+	color: red;
+}
+
 .containerExperience,
 .containerCompetences {
 	/* height: 46vh; */

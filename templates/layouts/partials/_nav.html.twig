@@ -1,6 +1,6 @@
 <header class='mx-0 d-flex navigation'>
-    <h2 class="bg-secondary"><a href="{{ path('app_home') }}" class="tex-muted text-center">Portail de compétences</a></h2>
-    <ul class="d-flex justify-content-between">
+    <h2 class="bg-dark p-2 rounded align-middle my-1"><a href="{{ path('app_home') }}" class="tex-primary text-center">Portail de compétences</a></h2>
+    <ul class="d-flex justify-content-between my-4">
         {% if app.user %}
             <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
             <li class="deroulant1">Mon profil

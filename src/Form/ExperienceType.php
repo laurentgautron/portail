@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Entreprise;
 use App\Entity\Experience;
+use App\Repository\EntrepriseRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,10 +29,13 @@ class ExperienceType extends AbstractType
             ->add('realisation')
             ->add('technique')
             ->add('entreprise', EntityType::class, [
+                'label' => 'entreprise',
                 'class' => Entreprise::class,
-                'choice_label' => 'nom'
-            ])
-            ->add('enregistrer', SubmitType::class)
+                'query_builder' => function (EntrepriseRepository $ent) {
+                    return $ent->createQueryBuilder('ent')
+                        ->orderBy('ent.bydefault', 'DESC');
+                    },
+                ])
         ;
     }
 

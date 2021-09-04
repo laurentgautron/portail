@@ -29,6 +29,11 @@ class Entreprise
      */
     private $experience;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $bydefault;
+
     public function __construct()
     {
         $this->experience = new ArrayCollection();
@@ -79,5 +84,22 @@ class Entreprise
         }
 
         return $this;
+    }
+
+    public function getBydefault(): ?bool
+    {
+        return $this->bydefault;
+    }
+
+    public function setBydefault(bool $bydefault): self
+    {
+        $this->bydefault = $bydefault;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->nom;
     }
 }

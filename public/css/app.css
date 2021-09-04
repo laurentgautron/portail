@@ -13,7 +13,7 @@ li {
 
 a {
 	text-decoration: none;
-	color: black;
+	color: #0d6efd;
 }
 
 .containerExperience,
@@ -96,9 +96,14 @@ hr {
 	left: 100%;
 }
 
-.sous1 > li a,
-.sous2 > li a {
+.sous1 li,
+.sous1 li a {
 	color: white;
+}
+
+.sous1 li:hover a:hover,
+.sous1 li:hover {
+	color: red;
 }
 
 .exp,

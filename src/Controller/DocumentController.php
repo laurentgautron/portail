@@ -16,6 +16,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DocumentController extends AbstractController
 {
+
+    /**
+     * @Route("/show/file/{id}", name="app_show_file")
+     *
+     */
+    public function index(User $user, string $publicResourcesFolderPath) 
+    {
+        
+    }
     /**
      * @Route("/document/{id}/create", name="app_document_create")
      */

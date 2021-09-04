@@ -73,7 +73,7 @@ class UserType extends AbstractType
                         'data' => $entity->getRoles()? $entity->getRoles()[0]:'',
                     ]);
                 })
-            ->add('Enregistrer', SubmitType::class);
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

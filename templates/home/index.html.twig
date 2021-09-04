@@ -6,14 +6,27 @@
     {% if app.user and not app.user.asLeft %}
         <div class="usersChanged">
             {% if usersUpdated %}
-                <h2>{{ usersUpdated | length }} utilisateur(s) modifié(s) depuis la dernière connexion</h2>
-                {% for userUpdated in usersUpdated %}
-                    <a href="{{ path('app_user_show', { id: userUpdated.id }) }}" class='link-primary' style="color:red;"><span>{{ userUpdated.nom }}</span><span>{{ userUpdated.prenom }}</span></a>
-                {% endfor %}
+                <h2>{{ usersUpdated | length }} profil(s) modifié(s) depuis la dernière connexion</h2>
+                <h2>{{ collChanged | length }} <span class="bg-warning">collaborateurs(s)</span> modifié(s) depuis la dernière connexion</h2>
+                <h2>{{ candChanged | length }} <span class="bg-primary">candidat(s)</span> modifié(s) depuis la dernière connexion</h2>
+                <h2>{{ newColl | length }} <span class="bg-success">Nouveau(x) collaborateur(s)</span> depuis la dernière connexion</h2>
+                <h2>{{ newCand | length }} <span class="bg-secondary">Nouveau(x) Candidat(s)</span> depuis la dernière connexion</h2>
             {% endif %}
         </div>
         {% for user in users %}
-            <p><a href="{{ path('app_user_show', { id: user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></p>
+            <p class='d-inline-block 
+            {% if user in collChanged %}
+                bg-warning
+            {% elseif user in candChanged %} 
+                bg-primary text-success 
+            {% elseif user in newColl %}  
+                bg-success
+            {% elseif user in newCand %}
+                bg-secondary
+            {% else %}
+                bg-info
+            {% endif %} 
+            mx-4 p-3 rounded'><a href="{{ path('app_user_show', { id: user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></p>
         {% endfor %}
     {% elseif not app.user %}
         <p>Bienvenu(e) dans le portail de compétence: veuillez vous connecter<p>

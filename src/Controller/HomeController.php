@@ -19,18 +19,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HomeController extends AbstractController
 {
     /**
+     * 
      * @Route("/", name="app_home")
+     * 
      */
     public function index(UserRepository $userRepository, LastconnexionRepository $lastconnexionRepository, UserCompetencesRepository $userCompetencesRepository, ExperienceRepository $experienceRepository): Response
     {
         $users = $userRepository->findAll();
         $usersUpdated =[];
+        $collChanged = [];
+        $candChanged = [];
+        $newColl = [];
+        $newCand = [];
         if ($this->getUser()) {
             $lastConnexionTab = $lastconnexionRepository->findByUser($this->getUser()->getId());
             //dd($this->getUser()->getUpdatedAt() > $lastConnexion);
@@ -42,18 +49,39 @@ class HomeController extends AbstractController
                     //recheche des expéreinces changées ($user->getId(), $lastConnexion)
                     $experienceChanged = $experienceRepository->isExperienceChangedAfter($user->getId(), $lastConnexion);
                     $competenceChanged = $userCompetencesRepository->isCompetenceChangedAfter($user->getId(), $lastConnexion);
-                    if ($lastConnexion and ($user->getUpdatedAt() > $lastConnexion) or $competenceChanged or $experienceChanged){
+                    $new = ($user->getCreatedAt() == $user->getUpdatedAt());
+                    if ($new and ($user->getRoles()[0] == "ROLE_COLL") and ($user->getUpdatedAt() > $lastConnexion)) {
+                        $newColl[] = $user;
+                    } elseif ($new and ($user->getRoles()[0] == "ROLE_CAND") and ($user->getUpdatedAt() > $lastConnexion))  {
+                        $newCand[] = $user;
+                    } elseif ($lastConnexion and !$new and (($user->getUpdatedAt() > $lastConnexion) or $competenceChanged or $experienceChanged)){
                         $usersUpdated[] = $user;
                     }
                }
             }
+
+            foreach($usersUpdated as $userUpdated) {
+                if ($userUpdated->getRoles()[0] == "ROLE_COLL") {
+                    $collChanged[] = $userUpdated;
+                } elseif ($userUpdated->getRoles()[0] == "ROLE_CAND") {
+                    $candChanged[] = $userUpdated;
+                }
+            }
+            //dd($collChanged);
+            //dd($usersUpdated);
+
             
         }
+        
         
 
         return $this->render('home/index.html.twig',[
             'users' => $users,
-            'usersUpdated' => $usersUpdated
+            'usersUpdated' => $usersUpdated,
+            'collChanged' => $collChanged,
+            'candChanged' => $candChanged,
+            'newColl' => $newColl,
+            'newCand' => $newCand
             ]);
     }
 
@@ -117,6 +145,9 @@ class HomeController extends AbstractController
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
+        $form->add('submit', SubmitType::class, [
+            'label' => 'Enregistrer'
+        ]);
 
         $form->handleRequest($request);
         
@@ -142,12 +173,13 @@ class HomeController extends AbstractController
             }
             $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
             $user->setRoles($form->get('role')->getData());
+            $user->setAsleft(0);
             $em->persist($user);
             $em->flush($user);
 
             $this->addFlash('success', 'profil créé avec succés');
 
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('home/create.html.twig', [
@@ -164,14 +196,22 @@ class HomeController extends AbstractController
         $currentRole = $user->getRoles()[0];
         $form = $this->createForm(UserType::class, $user);
         $form->remove('password');
+        $form->add('modif', SubmitType::class, [
+            'label' => 'Modifier'
+        ]);
     
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
+            if ($currentRole !== $form->get('role')->getData()) {
+                $user->setCreatedAt(new \DateTimeImmutable());
+                $user->setUpdatedAt(new \DateTimeImmutable());
+            }
             if ($currentRole === "ROLE_COLL" and $form->get('role')->getData() === "ROLE_CAND") {
                 $user->setAsLeft(1);
             }
             $user->setRoles($form->get('role')->getData());
+            $em->persist($user);
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 

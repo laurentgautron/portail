@@ -4,18 +4,18 @@
 
 {% block body %}
     {% if app.user and (app.user.id == user.id or (is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')))%}
-        <h1 class='text-center text-primary'>{{ user.nom }} {{ user.prenom }}</h1>
+        <h1 class='text-center text-primary d-inline'>{{ user.prenom }} {{ user.nom }}: </h1>
         {% if user.roles[0] == 'ROLE_CAND' and user.asLeft %}
-            <h2>Candidat, Ancien collaborateur</h2>
-        {% elseif user.roles[0] == 'ROLE_CAND' and user.asLeft %}
-            <h2>Candidat</h2>
+            <h2 class="d-inline mx-3">Candidat, ancien collaborateur</h2>
+        {% elseif user.roles[0] == 'ROLE_CAND' %}
+            <h2 class="d-inline">Candidat</h2>
         {% elseif user.roles[0] == 'ROLE_COLL' %}
-            <h2>Collaborateur</h2>
+            <h2 class="d-inline">Collaborateur</h2>
         {% endif %}
         <div class="informations d-flex">
-            <div class="user-comp">
+            <div class="user-comp mx-5">
+                <h2>Coordonnées:</h2>
                 <div class="coordonnees px-2">
-                    <h2>Coordonnées:</h2>
                         <p>Nom: {{ user.nom }}</p>
                         <p>Prenom: {{ user.prenom }}</p>
                         <p>Email: {{ user.email }}</p>
@@ -60,19 +60,21 @@
                         <hr>
                     {% endfor %}
                 </div>
-                <div class="competences px-2">
-                        <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
-                        {% for cate, competences in lescompetences %}
-                            <p>{{ cate }}</p>
-                            {% for competence in competences %}
-                                <p>Competence: {{ competence[0] }}</p>
-                                <p>niveau: {{ competence[1] }}</p>
-                                <p>Appetence: {{ competence[2] }}</p>
-                                <a href="{{ path('app_competences_modify', { id: competence[3], user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
-                                <hr>
-                            {% endfor %}
+                <div class="containerCompetences">
+                    <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
+                    <div class="competences px-2">
+                    {% for cate, competences in lescompetences %}
+                        <p>{{ cate }}</p>
+                        {% for competence in competences %}
+                            <p>Competence: {{ competence[0] }}</p>
+                            <p>niveau: {{ competence[1] }}</p>
+                            <p>Appetence: {{ competence[2] }}</p>
+                            <a href="{{ path('app_competences_modify', { id: competence[3], user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
+                            <hr>
                         {% endfor %}
-                    </div>
+                    {% endfor %}
+                </div>
+                </div>
             </div>
         </div>
     {% else %}

@@ -13,10 +13,12 @@ li {
 
 a {
 	text-decoration: none;
+	color: black;
 }
 
-.containerExperience {
-	height: 46vh;
+.containerExperience,
+.containerCompetences {
+	/* height: 46vh; */
 	width: 70vw;
 	overflow: scroll;
 }
@@ -68,21 +70,35 @@ hr {
 	background-color: black;
 }
 
-.sous {
+.sous1, .sous2 {
 	display: none;
-}
-
-.sous {
-    z-index: 345;
+	z-index: 345;
     width: 100%;
-	/* position: absolute; */
+	position: absolute;
 }
 
-.deroulant:hover > .sous {
+.deroulant1:hover > .sous1,
+.deroulant2:hover > .sous2 {
 	display: block;
 }
-.deroulant + .sous {
-    color: red;
+
+.sous1 > li {
+	position: relative;
+	left: -30px;
+	background-color: #000;
+	display: block;
+	width: 170px;
+}
+
+.sous2 {
+	background-color: #000;
+	top: 0;
+	left: 100%;
+}
+
+.sous1 > li a,
+.sous2 > li a {
+	color: white;
 }
 
 .exp,

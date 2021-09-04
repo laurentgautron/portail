@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\UserCompetences;
 use App\Form\UserCompetencesType;
 use App\Repository\UserCompetencesRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,8 @@ class UserCompetencesController extends AbstractController
         if ($form->isSubmitted() and $form->isValid()) {
             $userCompetence = $form->getData();
             $userCompetence->setUser($user);
+            $userCompetence->setCreatedAt(new \DateTimeImmutable());
+            $userCompetence->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($userCompetence);
             $em->flush();
             

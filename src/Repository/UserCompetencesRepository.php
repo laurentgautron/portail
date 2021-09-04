@@ -55,4 +55,16 @@ class UserCompetencesRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function isCompetenceChangedAfter($userId, $lastConnexion)
+    {
+        return $this->createQueryBuilder('comp')
+            ->Where('comp.user = :userId')
+            ->andWhere('comp.updatedAt > :lastConn')
+            ->setParameter('userId', $userId)
+            ->setParameter('lastConn', $lastConnexion)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

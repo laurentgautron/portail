@@ -19,25 +19,19 @@ class LogoutListener
     {
         $user = $logoutEvent->getToken()->getUser();
         $last = $this->lastconnexionRepository->findByUser($user->getId());
-        //dd($last == []);
         if ($last == []) {
-            //dd('mince');
             $thelast = new Lastconnexion;
             $thelast->setUser($user);
             $thelast->setLasLogoutAt(new \DateTimeImmutable());
             $this->em->persist($thelast);
-            //$this->em->flush();
         } else {
-            //dd('youpi');
             $last[0]->setLasLogoutAt(new \DateTimeImmutable());
         }
         
-        //dd($user->setLastconnexion);
-        $uow = $this->em->getUnitOfWork();
-        $this->em->persist($user);
-        $uow->computeChangeSets();
-        $changeset = $uow->getEntityChangeSet($user);
-        //dd($changeset);
+        // $uow = $this->em->getUnitOfWork();
+        // $this->em->persist($user);
+        // $uow->computeChangeSets();
+        // $changeset = $uow->getEntityChangeSet($user);
         $this->em->flush();
     }
 }

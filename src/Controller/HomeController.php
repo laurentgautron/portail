@@ -8,6 +8,7 @@ use App\Form\SearchType;
 use App\Repository\CategoryRepository;
 use App\Repository\CompetencesRepository;
 use App\Repository\ExperienceRepository;
+use App\Repository\LastconnexionRepository;
 use App\Repository\LogoutRepository;
 use App\Repository\UserCompetencesRepository;
 use App\Repository\UserRepository;
@@ -26,14 +27,33 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="app_home")
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, LastconnexionRepository $lastconnexionRepository, UserCompetencesRepository $userCompetencesRepository, ExperienceRepository $experienceRepository): Response
     {
         $users = $userRepository->findAll();
-        
+        $usersUpdated =[];
+        if ($this->getUser()) {
+            $lastConnexionTab = $lastconnexionRepository->findByUser($this->getUser()->getId());
+            //dd($this->getUser()->getUpdatedAt() > $lastConnexion);
+            if ($lastConnexionTab == []) {
+                $usersUpdated = $users;
+            } else {
+                $lastConnexion = $lastConnexionTab[0]->getLasLogoutAt();
+                foreach($users as $user) {
+                    //recheche des expéreinces changées ($user->getId(), $lastConnexion)
+                    $experienceChanged = $experienceRepository->isExperienceChangedAfter($user->getId(), $lastConnexion);
+                    $competenceChanged = $userCompetencesRepository->isCompetenceChangedAfter($user->getId(), $lastConnexion);
+                    if ($lastConnexion and ($user->getUpdatedAt() > $lastConnexion) or $competenceChanged or $experienceChanged){
+                        $usersUpdated[] = $user;
+                    }
+               }
+            }
+            
+        }
         
 
-        return $this->render('home/indextemp.html.twig',[
-            'users' => $users
+        return $this->render('home/index.html.twig',[
+            'users' => $users,
+            'usersUpdated' => $usersUpdated
             ]);
     }
 
@@ -97,8 +117,6 @@ class HomeController extends AbstractController
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
-        //$form->remove('currentRole');
-        //dd($form);
 
         $form->handleRequest($request);
         
@@ -143,8 +161,6 @@ class HomeController extends AbstractController
      */
     public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder): Response
     {
-        $userLogout = $user->getLogoutAt();
-        //dd($userLogout);
         $form = $this->createForm(UserType::class, $user);
         $form->remove('password');
     
@@ -152,7 +168,6 @@ class HomeController extends AbstractController
         
         if($form->isSubmitted() && $form->isValid()) {
             $user->setRoles($form->get('role')->getData());
-            //$user->setUpdatedAt(new \DateTimeImmutable());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');
 
@@ -218,13 +233,10 @@ class HomeController extends AbstractController
         $form->remove('niveau');
 
         $form->handleRequest($request);
-        //dd($form);
         $users = [];
         if ($form->isSubmitted() and $form->isValid()) {
             $users = $userRepository->findByNom($form->getData('nom'));
-            //dd($users);
         }
-        //$users = $userRepository->findByUser();
         return $this->render('search/user.html.twig', [
             'form' => $form->createView(),
             'users' => $users

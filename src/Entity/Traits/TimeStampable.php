@@ -47,8 +47,6 @@ trait TimeStampable
         if ($this->getCreatedAt()=== null) {
             $this->setCreatedAt(new \DateTimeImmutable());
         }
-        if ($this->getLogoutAt()!== null) {
             $this->setUpdatedAt(new \DateTimeImmutable());
-        }
     }
 }

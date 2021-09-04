@@ -7,15 +7,14 @@
     <pre>
         {{ dump(app.user) }}
     </pre>
-        {% if userLastConnexion %}
-        <p>{{ app.user.nom }} connecté le :{{ userLastConnexion |date('Y/m/d H:m:s') }}</p>
-        {% endif %}
         <h1>Bonjour portail</h1>
         <div class="usersChanged">
-            <h2>{{ modifiedUsers | length }} utilisateurs modifiés depuis la dernière connexion</h2>
-            {% for modifiedUser in modifiedUsers %}
-                <a href="{{ path('app_user_show', { id: modifiedUser.id }) }}" class='link-primary' style="color:red;"><span>{{ modifiedUser.nom }}</span><span>{{ modifiedUser.prenom }}</span></a>
-            {% endfor %}
+            {% if usersUpdated %}
+                <h2>{{ usersUpdated | length }} utilisateur(s) modifié(s) depuis la dernière connexion</h2>
+                {% for userUpdated in usersUpdated %}
+                    <a href="{{ path('app_user_show', { id: userUpdated.id }) }}" class='link-primary' style="color:red;"><span>{{ userUpdated.nom }}</span><span>{{ userUpdated.prenom }}</span></a>
+                {% endfor %}
+            {% endif %}
         </div>
         {% for user in users %}
             <p><a href="{{ path('app_user_show', { id: user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></p>

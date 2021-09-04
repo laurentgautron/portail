@@ -1,7 +1,0 @@
-{% extends "layouts/base.html.twig" %}
-
-{% block body %}
-   {% for user in users %}
-        <p><a href="{{ path('app_user_show', {id: user.id}) }}">{{ user.nom }} / {{ user.prenom }}</p>
-   {% endfor %} 
-{% endblock %}

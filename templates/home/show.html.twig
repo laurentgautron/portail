@@ -34,9 +34,12 @@
                             </div>
                         {% endif %}
                 </div>
-                <div class="doc">
-
-                    <a href="{{ path('app_document_create', { id: user.id }) }}">Ajouter un document</a>
+                <div class="doc border border-dark">
+                    <h2>Documents</h2>
+                    {% for document in user.documents %}
+                        <a href="{{ asset('uploads/brochures/' ~ document.name) }}">{{ document.name }}</a>
+                    {% endfor %}
+                    <a href="{{ path('app_document_create', { id: user.id }) }}" class="d-block btn btn-primary">Ajouter un document</a>
                 </div>
             </div>
             <div class="nextInfo mx-2">

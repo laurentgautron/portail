@@ -9,18 +9,15 @@ use App\Repository\CategoryRepository;
 use App\Repository\CompetencesRepository;
 use App\Repository\ExperienceRepository;
 use App\Repository\LastconnexionRepository;
-use App\Repository\LogoutRepository;
 use App\Repository\UserCompetencesRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HomeController extends AbstractController
@@ -109,27 +106,16 @@ class HomeController extends AbstractController
         }
         $cates = [];
         $lesCompetencesUser = [];
-        //dd($todisplay);
         foreach($todisplay as $key => $values) {
-            //dd($key);
-            //dd($values);
             $cates = $categoryRepository->findById($key)[0]->getNom();
-            //dd($cates);
-            //dd($values);
             foreach($values as $value) {
-                //dd($value);
                     $nomComp = $competencesRepository->findById($value)[0]->getNomcompetence();
                     $niveau = $userCompetencesRepository->searchCompUser($value, $user)[0]->getNiveau();
                     $appetence = $userCompetencesRepository->searchCompUser($value, $user)[0]->getAppetence();
                     $idcomp = $userCompetencesRepository->searchCompUser($value, $user)[0]->getId();
-                    //dd($niveau);
                     $lesCompetencesUser[$cates][] = [$nomComp, $niveau, $appetence, $idcomp];
                 }
         }
-        //dd($lesCompetencesUser);
-        // comps recherche par user et colmpetencesID
-        //dd($cates);
-        //dd(array_keys($todisplay));
         return $this->render('home/show.html.twig', [
             'lescompetences' => $lesCompetencesUser,
             'user' => $user,
@@ -141,7 +127,7 @@ class HomeController extends AbstractController
      * @Route("/user/create", name="app_user_create", methods={"GET", "POST"})
      *
      */
-    public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder, SluggerInterface $slugger): Response
+    public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
@@ -152,25 +138,7 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $brochureFile */
-            $documentFile = $form->get('document')->getData();
-
-            if ($documentFile) {
-                $originalFilename = pathinfo($documentFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$documentFile->guessExtension();
-
-                try {
-                    $documentFile->move(
-                        $this->getParameter('documents_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                $user->setDocumentFilename($newFilename);
-            }
+            
             $user->setPassword($passwordEncoder->hashPassword($user, $user->getPassword()));
             $user->setRoles($form->get('role')->getData());
             $user->setAsleft(0);

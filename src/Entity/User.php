@@ -97,11 +97,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $ville;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    private $documentFilename;
-
-    /**
      * @ORM\OneToMany(targetEntity=UserCompetences::class, mappedBy="user")
      */
     private $userComp;
@@ -116,22 +111,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $asLeft;
 
-    public function getDocumentFilename()
-    {
-        return $this->documentFilename;
-    }
-
-    public function setDocumentFilename($documentFilename)
-    {
-        $this->documentFilename = $documentFilename;
-
-        return $this;
-    }
+    /**
+     * @ORM\OneToMany(targetEntity=Documents::class, mappedBy="user")
+     */
+    private $documents;
 
     public function __construct()
     {
         $this->exp = new ArrayCollection();
         $this->userComp = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -385,6 +374,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAsLeft(?bool $asLeft): self
     {
         $this->asLeft = $asLeft;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Documents[]
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Documents $document): self
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents[] = $document;
+            $document->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Documents $document): self
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getUser() === $this) {
+                $document->setUser(null);
+            }
+        }
 
         return $this;
     }

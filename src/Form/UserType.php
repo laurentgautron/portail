@@ -40,21 +40,6 @@ class UserType extends AbstractType
                 ]
             ])
             ->add('telephone')
-            ->add('document', FileType::class, [
-                'label' => 'Document (PDF file)',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/x-pdf',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid PDF document',
-                    ])
-                ],
-            ])
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 $entity = $event->getData();
                 $form1 = $event->getForm();

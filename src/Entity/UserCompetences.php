@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=UserCompetencesRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class UserCompetences
 {

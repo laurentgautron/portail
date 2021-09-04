@@ -29,8 +29,6 @@ class UserCompetencesController extends AbstractController
         if ($form->isSubmitted() and $form->isValid()) {
             $userCompetence = $form->getData();
             $userCompetence->setUser($user);
-            $userCompetence->setCreatedAt(new \DateTimeImmutable());
-            $userCompetence->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($userCompetence);
             $em->flush();
             

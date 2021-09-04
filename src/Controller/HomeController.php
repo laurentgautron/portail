@@ -104,7 +104,7 @@ class HomeController extends AbstractController
         //dd(array_keys($todisplay));
         return $this->render('home/show.html.twig', [
             'lescompetences' => $lesCompetencesUser,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -161,12 +161,16 @@ class HomeController extends AbstractController
      */
     public function edit(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordEncoder): Response
     {
+        $currentRole = $user->getRoles()[0];
         $form = $this->createForm(UserType::class, $user);
         $form->remove('password');
     
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()) {
+            if ($currentRole === "ROLE_COLL" and $form->get('role')->getData() === "ROLE_CAND") {
+                $user->setAsLeft(1);
+            }
             $user->setRoles($form->get('role')->getData());
             $em->flush($user);
             $this->addFlash('success', 'profil modifié avec succés');

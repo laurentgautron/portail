@@ -4,75 +4,77 @@
 
 {% block body %}
     {% if app.user and (app.user.id == user.id or (is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')))%}
-    <h1 class='text-center text-primary'>{{ user.nom }} {{ user.prenom }}</h1>
-    {% if user.roles[0] == 'ROLE_CAND' %}
-        <h2>Candidat</h2>
-    {% elseif user.roles[0] == 'ROLE_COLL' %}
-        <h2>Collaborateur</h2>
-    {% endif %}
-    <div class="informations d-flex">
-        <div class="user-comp">
-            <div class="coordonnees px-2">
-                <h2>Coordonnées:</h2>
-                    <p>Nom: {{ user.nom }}</p>
-                    <p>Prenom: {{ user.prenom }}</p>
-                    <p>Email: {{ user.email }}</p>
-                    <p>Adresse: {{ user.adresse }}</p>
-                    <p>Ville: {{ user.ville }}</p>
-                    <p>Code postal: {{ user.codePostal }}</p>
-                    <p>Téléphone: {{ user.telephone }}</p>
-                    <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
-                    <p>À: {{ user.createdAt | date('H:i:s')}}</p>
-                    {% if app.user.id == user.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_COM') %}
-                        <div class="cta mt-3 mb-2">
-                            <a href="{{ path('app_user_edit', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
-                            {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-            </div>
-        </div>
-        <div class="nextInfo mx-2">
-            <h2 class="exp">Expériences:</h2>
-            <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary mb-2">Ajouter une expérience</a>
-            <div class="containerExperience mb-1 px-2">
-                {% for experience in user.exp %}
-                    <div class="oneExp">
-                        <span>Du {{ experience.beginAt | date('Y/m/d') }} </span>
-                        <span>AU {{ experience.stopAt | date('Y/m/d') }}</span>
-                        <p>Descrition: {{ experience.description }}</p>
-                        <p>fonction: {{ experience.fonction }}</p>
-                        <p>Réalisation: {{ experience.realisation }}</p>
-                        <p>Lieu: {{ experience.lieu }}</p>
-                        {% if experience.entreprise %}
-                            <p>Entreprise: {{ experience.entreprise.getNom() }}</p>
-                        {% else %}
-                            <p>Entreprise: pas dans la BDD</p>
+        <h1 class='text-center text-primary'>{{ user.nom }} {{ user.prenom }}</h1>
+        {% if user.roles[0] == 'ROLE_CAND' and user.asLeft %}
+            <h2>Candidat, Ancien collaborateur</h2>
+        {% elseif user.roles[0] == 'ROLE_CAND' and user.asLeft %}
+            <h2>Candidat</h2>
+        {% elseif user.roles[0] == 'ROLE_COLL' %}
+            <h2>Collaborateur</h2>
+        {% endif %}
+        <div class="informations d-flex">
+            <div class="user-comp">
+                <div class="coordonnees px-2">
+                    <h2>Coordonnées:</h2>
+                        <p>Nom: {{ user.nom }}</p>
+                        <p>Prenom: {{ user.prenom }}</p>
+                        <p>Email: {{ user.email }}</p>
+                        <p>Adresse: {{ user.adresse }}</p>
+                        <p>Ville: {{ user.ville }}</p>
+                        <p>Code postal: {{ user.codePostal }}</p>
+                        <p>Téléphone: {{ user.telephone }}</p>
+                        <p>Date création: {{ user.createdAt | date('Y/m/d')}}</p>
+                        <p>À: {{ user.createdAt | date('H:i:s')}}</p>
+                        {% if app.user.id == user.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_COM') %}
+                            <div class="cta mt-3 mb-2">
+                                <a href="{{ path('app_user_edit', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
+                                {% endif %}
+                            </div>
                         {% endif %}
-                        <p>Contexte: {{ experience.contexte }}</p>
-                        <p>Environnement technique: {{ experience.technique }}</p>
-                        <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
-                        <a href="{{ path('app_experience_edit', {id: experience.id}) }}" class="btn btn-primary">Modifier</a>
-                    </div>
-                    <hr>
-                {% endfor %}
+                </div>
             </div>
-            <div class="competences px-2">
-                    <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
-                    {% for cate, competences in lescompetences %}
-                        <p>{{ cate }}</p>
-                        {% for competence in competences %}
-                            <p>Competence: {{ competence[0] }}</p>
-                            <p>niveau: {{ competence[1] }}</p>
-                            <p>Appetence: {{ competence[2] }}</p>
-                            <a href="{{ path('app_competences_modify', { id: competence[3], user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
-                            <hr>
-                        {% endfor %}
+            <div class="nextInfo mx-2">
+                <h2 class="exp">Expériences:</h2>
+                <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary mb-2">Ajouter une expérience</a>
+                <div class="containerExperience mb-1 px-2">
+                    {% for experience in user.exp %}
+                        <div class="oneExp">
+                            <span>Du {{ experience.beginAt | date('Y/m/d') }} </span>
+                            <span>AU {{ experience.stopAt | date('Y/m/d') }}</span>
+                            <p>Descrition: {{ experience.description }}</p>
+                            <p>fonction: {{ experience.fonction }}</p>
+                            <p>Réalisation: {{ experience.realisation }}</p>
+                            <p>Lieu: {{ experience.lieu }}</p>
+                            {% if experience.entreprise %}
+                                <p>Entreprise: {{ experience.entreprise.getNom() }}</p>
+                            {% else %}
+                                <p>Entreprise: pas dans la BDD</p>
+                            {% endif %}
+                            <p>Contexte: {{ experience.contexte }}</p>
+                            <p>Environnement technique: {{ experience.technique }}</p>
+                            <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
+                            <a href="{{ path('app_experience_edit', {id: experience.id}) }}" class="btn btn-primary">Modifier</a>
+                        </div>
+                        <hr>
                     {% endfor %}
                 </div>
+                <div class="competences px-2">
+                        <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
+                        {% for cate, competences in lescompetences %}
+                            <p>{{ cate }}</p>
+                            {% for competence in competences %}
+                                <p>Competence: {{ competence[0] }}</p>
+                                <p>niveau: {{ competence[1] }}</p>
+                                <p>Appetence: {{ competence[2] }}</p>
+                                <a href="{{ path('app_competences_modify', { id: competence[3], user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
+                                <hr>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+            </div>
         </div>
-    </div>
     {% else %}
         <p>Vous devez être connecté en tant que commercial au administrateur pour voir un profil</p>
         <a href="{{ path('app_home') }}" class="btn btn-primary">Accueil</a>

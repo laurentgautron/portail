@@ -3,11 +3,7 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    {% if app.user %}
-    <pre>
-        {{ dump(app.user) }}
-    </pre>
-        <h1>Bonjour portail</h1>
+    {% if app.user and not app.user.asLeft %}
         <div class="usersChanged">
             {% if usersUpdated %}
                 <h2>{{ usersUpdated | length }} utilisateur(s) modifié(s) depuis la dernière connexion</h2>
@@ -19,7 +15,9 @@
         {% for user in users %}
             <p><a href="{{ path('app_user_show', { id: user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></p>
         {% endfor %}
+    {% elseif not app.user %}
+        <p>Bienvenu(e) dans le portail de compétence: veuillez vous connecter<p>
     {% else %}
-        <p>Bienvenu(e) dans le portail de compétence: veuiilez vous connecter<p>
+        <p>Vous êtes un ancen collaborateur: vous ne pouvez plus vous accéder à votre compte !</p>
     {% endif %}
 {% endblock %}

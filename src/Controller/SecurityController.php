@@ -15,12 +15,15 @@ class SecurityController extends AbstractController
      * @Route("/login", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
-    {
+    {   
         if ($this->getUser()) {
             
             
             return $this->redirectToRoute('app_home_connected');
+        
         }
+        
+        
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

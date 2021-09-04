@@ -107,14 +107,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $userComp;
 
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $logoutAt;
-
-    /**
      * @ORM\OneToOne(targetEntity=Lastconnexion::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $lastconnexion;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $asLeft;
 
     public function getDocumentFilename()
     {
@@ -355,18 +355,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLogoutAt(): ?\DateTimeImmutable
-    {
-        return $this->logoutAt;
-    }
-
-    public function setLogoutAt(?\DateTimeImmutable $logoutAt): self
-    {
-        $this->logoutAt = $logoutAt;
-
-        return $this;
-    }
-
     public function getLastconnexion(): ?Lastconnexion
     {
         return $this->lastconnexion;
@@ -385,6 +373,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->lastconnexion = $lastconnexion;
+
+        return $this;
+    }
+
+    public function getAsLeft(): ?bool
+    {
+        return $this->asLeft;
+    }
+
+    public function setAsLeft(?bool $asLeft): self
+    {
+        $this->asLeft = $asLeft;
 
         return $this;
     }

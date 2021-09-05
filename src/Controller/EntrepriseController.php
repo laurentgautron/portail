@@ -10,12 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EntrepriseController extends AbstractController
 {
     /**
      * @Route("/entreprise/show", name="app_show_entreprise")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(EntrepriseRepository $entrepriseRepository): Response
     {
@@ -26,6 +28,7 @@ class EntrepriseController extends AbstractController
 
     /**
      * @Route("/entreprise/add", name="app_add_entreprise")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function add(Request $request, EntityManagerInterface $em): Response
     {
@@ -37,7 +40,9 @@ class EntrepriseController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() and $form->isValid()) {
+            $this->addFlash('info', 'l\'entreprise a été ajoutée');
             $entreprise = $form->getData();
+            $entreprise->setBydefault(0);
             $em->persist($entreprise);
             $em->flush();
 
@@ -51,15 +56,18 @@ class EntrepriseController extends AbstractController
 
     /**
      * @Route("/entreprise/delete/{id<[0-9]+>}", name="app_delete_entreprise")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(EntityManagerInterface $em, Entreprise $entreprise, EntrepriseRepository $entrepriseRepository, ExperienceRepository $experienceRepository)
     {
         $entrepriseId = $entrepriseRepository->findBy(['id' => $entreprise->getId()])[0]->getId();
         //dd($entrepriseId);
-        $experience = $experienceRepository->findBy(['entreprise' => $entrepriseId])[0];
+        $experience = $experienceRepository->findBy(['entreprise' => $entrepriseId]);
         //dd($experience);
-        $experience->setEntreprise(null);
-        $em->persist($experience);
+        if ($experience) {
+            $experience[0]->setEntreprise(null);
+            $em->persist($experience[0]);
+        }
         $em->remove($entreprise);
         $em->flush();
         return $this->redirectToRoute('app_show_entreprise');
@@ -67,6 +75,7 @@ class EntrepriseController extends AbstractController
 
     /**
      * @Route("/entreprise/modification/{id<[0-9]+>}", name="app_modification_entreprise")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function modify(Request $request, Entreprise $entreprise, EntityManagerInterface $em)
     {

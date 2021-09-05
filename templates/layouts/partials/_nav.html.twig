@@ -3,9 +3,10 @@
     <ul class="d-flex justify-content-between my-4">
         {% if app.user %}
             <li><a href="{{ path('app_user_create') }}">Créer un profil</a></li>
+            <li><a href="{{ path('app_logout')}}">Se déconnecter</a></li>
             <li class="deroulant1">Mon profil
                 <ul class="sous1">
-                    <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Changer mon profil</a></li>
+                    <li><a href="{{ path('app_user_show', {id: app.user.id}) }}">Voir/Changer mon profil</a></li>
                     <li><a href="{{ path('app_reset_password') }}">Changer mot de passe</a></li>
                 </ul>
             </li>
@@ -31,12 +32,11 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="{{ path('app_logout')}}">Se déconnecter</a></li>
             <li class='deroulant1'>Recherches
                 <ul class='sous1'>
-                    <li><a href="{{ path('app_search_name') }}">par Nom</a></li>
-                    <li><a href="{{ path('app_search_competences') }}">par Compétences</a></li>
-                    <li><a href="">par compétences préférées</a></li>
+                    <li><a href="{{ path('app_search_name') }}">Par Nom</a></li>
+                    <li><a href="{{ path('app_search_competences') }}">Par Compétences</a></li>
+                    <li><a href="{{ path('app_search_appetences') }}">Par compétences préférées</a></li>
                 </ul>
             </li>
         {% else %}

@@ -7,7 +7,7 @@ use App\Repository\DocumentsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=DocumentsRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\DocumentsRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
 class Documents

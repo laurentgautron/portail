@@ -27,22 +27,27 @@
                         <p>À: {{ user.createdAt | date('H:i:s')}}</p>
                         {% if app.user.id == user.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_COM') %}
                             <div class="cta mt-3 mb-2">
+                                {% if is_granted("ROLE_ADMIN") %}
                                 <a href="{{ path('app_user_edit', { id: user.id }) }}" class='btn btn-primary'>Modifier</a>
+                                {% endif %}
                                 {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('app_user_delete', { id: user.id }) }}" class='btn btn-danger'>Supprimer</a>
                                 {% endif %}
                             </div>
                         {% endif %}
                 </div>
-                <div class="doc border border-dark">
-                    <h2>Documents</h2>
+                <h2>Documents</h2>
+                <div class="doc border border-dark p-2">
                     {% for document in user.documents %}
                         <a href="{{ asset('uploads/brochures/' ~ document.name) }}">{{ document.name }}</a>
                     {% endfor %}
-                    <a href="{{ path('app_document_create', { id: user.id }) }}" class="d-block btn btn-primary">Ajouter un document</a>
+                    <br />
+                    {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ path('app_document_create', { id: user.id }) }}" class="d-inline-block btn btn-primary p-1 my-1">Ajouter un document</a>
+                    {% endif %}
                 </div>
             </div>
-            <div class="nextInfo mx-2">
+            <div class="nextInfo mx-2 my-3">
                 <h2 class="exp">Expériences:</h2>
                 <a href="{{ path('app_experience_create', { id: user.id }) }}" class="btn btn-primary mb-2">Ajouter une expérience</a>
                 <div class="containerExperience mb-1 px-2">
@@ -61,14 +66,19 @@
                             {% endif %}
                             <p>Contexte: {{ experience.contexte }}</p>
                             <p>Environnement technique: {{ experience.technique }}</p>
-                            <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <a href="{{ path('app_experience_delete', {id: experience.id}) }}" class="btn btn-danger">Supprimer</a>
+                            {% endif %}
                             <a href="{{ path('app_experience_edit', {id: experience.id}) }}" class="btn btn-primary">Modifier</a>
                         </div>
                         <hr>
                     {% endfor %}
                 </div>
                 <div class="containerCompetences">
-                    <h2 class="comp">Compétences:</h2><a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
+                    <h2 class="comp">Compétences:</h2>
+                    {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_COLL")%}
+                    <a href="{{ path('app_user_add_competence', { id: user.id}) }}" class="btn btn-primary mb-2">Ajouter une competence</a>
+                    {% endif %}
                     <div class="competences px-2">
                     {% for cate, competences in lescompetences %}
                         <p>{{ cate }}</p>
@@ -76,7 +86,9 @@
                             <p>Competence: {{ competence[0] }}</p>
                             <p>niveau: {{ competence[1] }}</p>
                             <p>Appetence: {{ competence[2] }}</p>
+                            {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_COLL")%}
                             <a href="{{ path('app_competences_modify', { id: competence[3], user: user.id}) }}" class="btn btn-primary mb-2">Modifier la compétence</a>
+                            {% endif %}
                             <hr>
                         {% endfor %}
                     {% endfor %}
@@ -85,7 +97,7 @@
             </div>
         </div>
     {% else %}
-        <p>Vous devez être connecté en tant que commercial au administrateur pour voir un profil</p>
+        <p>Vous devez être connecté en tant que commercial ou administrateur pour voir un profil</p>
         <a href="{{ path('app_home') }}" class="btn btn-primary">Accueil</a>
     {% endif %}
 {% endblock %}

@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\UserCompetences;
 use App\Form\UserCompetencesType;
-use App\Repository\UserCompetencesRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -1,3 +1,9 @@
-<h1>Ajouter une compétence au profil</h1>
-{{ form_start(addUserCompetenceForm) }}
-{{ form_end(addUserCompetenceForm) }}
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}expérience{% endblock %}
+
+{% block body %}
+    <h1>Ajouter une compétence au profil</h1>
+    {{ form_start(addUserCompetenceForm) }}
+    {{ form_end(addUserCompetenceForm) }}
+{% endblock %}

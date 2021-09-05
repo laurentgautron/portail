@@ -1,9 +1,9 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Portail{% endblock %}
 
 {% block body %}
-    {% if app.user and not app.user.asLeft %}
+    {% if app.user and not app.user.asLeft  and (app.user.roles[0] in  ["ROLE_ADMIN", "ROLE_COM"]) %}
         <div class="usersChanged">
             {% if usersUpdated %}
                 <h2>{{ usersUpdated | length }} profil(s) modifié(s) depuis la dernière connexion</h2>
@@ -26,11 +26,11 @@
             {% else %}
                 bg-info
             {% endif %} 
-            mx-4 p-3 rounded'><a href="{{ path('app_user_show', { id: user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></p>
+            mx-4 p-3 rounded'><a href="{{ path('app_user_show', { id: user.id}) }}" class="text-dark">{{ user.nom }} {{ user.prenom }}</a></p>
         {% endfor %}
     {% elseif not app.user %}
         <p>Bienvenu(e) dans le portail de compétence: veuillez vous connecter<p>
     {% else %}
-        <p>Vous êtes un ancen collaborateur: vous ne pouvez plus vous accéder à votre compte !</p>
+        <p>vous ne pouvez seulement voir votre profil !</p>
     {% endif %}
 {% endblock %}

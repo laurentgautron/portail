@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimeStampable;
-use App\Repository\UserCompetencesRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\TimeStampable;
 
 /**
- * @ORM\Entity(repositoryClass=UserCompetencesRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\UserCompetencesRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
 class UserCompetences
@@ -23,11 +23,21 @@ class UserCompetences
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 5,
+     *      notInRangeMessage = "vous devez rentrer un chiffre entrer {{ min }} et {{ max }}",
+     *)
      */
     private $niveau;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 5,
+     *      notInRangeMessage = "vous devez rentrer un chiffre entrer {{ min }} et {{ max }}",
+     *)
      */
     private $appetence;
 

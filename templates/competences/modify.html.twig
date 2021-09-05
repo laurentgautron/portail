@@ -1,2 +1,8 @@
-<h1>Modifier la compétence <span>{{ competence.nomcompetence }}</span></h1>
-{{ form(form) }}
+{% extends "layouts/base.html.twig" %}
+
+{% block title%} modification {% endblock %}
+
+{% block body %}
+    <h1>Modifier la compétence <span class="text-primary">{{ competence.nomcompetence }}</span></h1>
+    {{ form(form) }}
+{% endblock %}

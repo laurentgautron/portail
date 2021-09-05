@@ -67,4 +67,16 @@ class UserCompetencesRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function searchCompAp($comp, $ap)
+    {
+        return $this->createQueryBuilder('uc')
+            ->Where('uc.competence = :val')
+            ->andWhere('uc.appetence = :ap')
+            ->setParameter('val',$comp)
+            ->setParameter('ap', $ap)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -1,12 +1,11 @@
 {% extends "layouts/base.html.twig" %}
 
-{% block title %}research{% endblock %}
+{% block title %} recherche {% endblock %}
 
 {% block body %}
-    <h1>Faites une recherche par compétence et par niveau</h1>
+    <h1>Faites une recherche par compétence et par appétence</h1>
     {{ form_start(form) }}
     {{ form_end(form) }}
-    <p>(p.s. : si vous ne rentrez pas de niveau vous faites une recherche seulement par compétence)</p>
     {% if not users %}
         <h2>Pas de résultat pour la recherche</h2>
     {% else %}

@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Competences;
 use App\Entity\UserCompetences;
 use Symfony\Component\Form\AbstractType;
@@ -10,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class UserCompetencesType extends AbstractType
 {
@@ -20,8 +20,8 @@ class UserCompetencesType extends AbstractType
                 'class' => Competences::class,
                 'choice_label' => 'nomCompetence'
             ])
-            ->add('niveau')
-            ->add('appetence')
+            ->add('niveau', IntegerType::class)
+            ->add('appetence', IntegerType::class)
             ->add('Ajouter', SubmitType::class)
         ;
     }

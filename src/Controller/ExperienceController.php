@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ExperienceController extends AbstractController
@@ -50,6 +52,7 @@ class ExperienceController extends AbstractController
 
     /**
      * @Route("/experience/{id<[0-9]+>}/edit", name="app_experience_edit", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')")
      * 
      */
     public function edit(Request $request, Experience $experience, EntityManagerInterface $em): Response
@@ -77,7 +80,7 @@ class ExperienceController extends AbstractController
 
     /**
      * @Route("/experience/{id<[0-9]+>}/delete", name="app_experience_delete", methods={"GET"})
-     * 
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Experience $experience, EntityManagerInterface $em): Response
     {

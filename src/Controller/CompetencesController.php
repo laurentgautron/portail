@@ -6,7 +6,6 @@ use App\Entity\Category;
 use App\Form\SearchType;
 use App\Entity\Competences;
 use App\Form\CompetencesType;
-use App\Entity\UserCompetences;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CompetencesRepository;
@@ -15,13 +14,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class CompetencesController extends AbstractController
 {
     /**
      * @Route("/competences/add", name="app_add_competences")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function add(Request $request, EntityManagerInterface $em): Response
     {
@@ -45,6 +48,7 @@ class CompetencesController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() and $form->isValid()) {
+            $this->addFlash('info', 'nom de compétence ajouté !');
             $competence = $form->getData();
             $em->persist($competence);
             $em->flush();
@@ -59,6 +63,7 @@ class CompetencesController extends AbstractController
 
     /**
      * @Route("/competences/show", name="app_show_competences")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(CompetencesRepository $competencesRepository): Response
     {
@@ -69,6 +74,7 @@ class CompetencesController extends AbstractController
 
     /**
      * @Route("/competences/delete/{id<[0-9]+>}", name="app_delete_competence")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Competences $competence, EntityManagerInterface $em, UserCompetencesRepository $usercompetencesRepository): Response
     {
@@ -85,10 +91,14 @@ class CompetencesController extends AbstractController
 
     /**
      * @Route("/competences/modification/{id<[0-9]+>}", name="app_modification_competence")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function modification(Request $request, Competences $competence, EntityManagerInterface $em)
     {
         $form = $this->createForm(CompetencesType::class, $competence);
+        $form->add('submit', SubmitType::class, [
+            'label' => 'modifier'
+        ]);
 
         $form->handleRequest($request);
 
@@ -107,7 +117,8 @@ class CompetencesController extends AbstractController
     }
 
     /** 
-    * @Route("/research", name="app_search_competences")
+    * @Route("/research/comp", name="app_search_competences")
+    *@Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')")
     */
     public function researchByCompNiv(Request $request, CompetencesRepository $competencesRepository, UserCompetencesRepository $usercompetencesRepository)
     {
@@ -139,7 +150,39 @@ class CompetencesController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/)
-     */
+    /** 
+    * @Route("/research/app", name="app_search_appetences")
+    *@Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_COM')")
+    */
+    public function researchByCompAp(Request $request, CompetencesRepository $competencesRepository, UserCompetencesRepository $usercompetencesRepository)
+    {
+        $form = $this->createForm(SearchType::class);
+        $form->remove('niveau');
+        $form->add('appetences', IntegerType::class, [
+            'label' => 'Note appétence'
+        ]);
+        $form->add('submit', SubmitType::class,[
+            'label' => 'Enregistrer'
+        ]);
+
+        $form->handleRequest($request);
+        $competences = [];
+        $users = [];
+
+        if ($form->isSubmitted() and $form->isValid()) {
+            $competences = $competencesRepository->findBynomcompetence($form->getData('nomcompetence'));
+            $app = $form->get('appetences')->getData();
+            foreach($competences as $competence) {
+                $userCompetences = $usercompetencesRepository->searchCompAp($competence->getId(), $app);
+                foreach($userCompetences as $userCompetence){
+                    $users[] = $userCompetence->getUser();
+                }
+            }
+        }
+        return $this->render('search/compApp.html.twig', [
+            'form' => $form->createView(),
+            'competences' => $competences,
+            'users' => $users
+        ]);
+    }
 }

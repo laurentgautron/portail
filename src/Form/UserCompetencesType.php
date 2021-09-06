@@ -22,7 +22,6 @@ class UserCompetencesType extends AbstractType
             ])
             ->add('niveau', IntegerType::class)
             ->add('appetence', IntegerType::class)
-            ->add('Ajouter', SubmitType::class)
         ;
     }
 

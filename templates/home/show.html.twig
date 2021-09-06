@@ -12,10 +12,10 @@
         {% elseif user.roles[0] == 'ROLE_COLL' %}
             <h2 class="d-inline">Collaborateur</h2>
         {% endif %}
-        <div class="informations d-flex">
-            <div class="user-comp mx-5">
+        <div class="informations d-flex justify-content-center mx-1">
+            <div class="user-comp mx-1">
                 <h2>Coordonnées:</h2>
-                <div class="coordonnees px-2">
+                <div class="coordonnees px-1">
                         <p>Nom: {{ user.nom }}</p>
                         <p>Prenom: {{ user.prenom }}</p>
                         <p>Email: {{ user.email }}</p>
@@ -53,8 +53,8 @@
                 <div class="containerExperience mb-1 px-2">
                     {% for experience in user.exp %}
                         <div class="oneExp">
-                            <span>Du {{ experience.beginAt | date('Y/m/d') }} </span>
-                            <span>AU {{ experience.stopAt | date('Y/m/d') }}</span>
+                            DU <span class="text-dark d-inline-block bg-info p-1"> {{ experience.beginAt | date('Y/m/d') }} </span>
+                            AU<span class="text-dark d-inline-block bg-info p-1"> {{ experience.stopAt | date('Y/m/d') }}</span>
                             <p>Descrition: {{ experience.description }}</p>
                             <p>fonction: {{ experience.fonction }}</p>
                             <p>Réalisation: {{ experience.realisation }}</p>
@@ -81,7 +81,7 @@
                     {% endif %}
                     <div class="competences px-2">
                     {% for cate, competences in lescompetences %}
-                        <p>{{ cate }}</p>
+                        <p class="text-primary">{{ cate }}</p>
                         {% for competence in competences %}
                             <p>Competence: {{ competence[0] }}</p>
                             <p>niveau: {{ competence[1] }}</p>

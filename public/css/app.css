@@ -118,3 +118,30 @@ hr {
 header ul {
 	width: 70%;
 }
+
+.nextInfo {
+	height: 100%;
+}
+
+.coordonnees {
+	width: 75%;
+}
+
+.doc {
+	width: 55%;
+}
+
+.user-comp h2,
+.user-comp {
+	width: 40%;
+}
+
+.containerExperience {
+	height: 50%;
+	overflow: scroll;
+}
+
+.containerCompetences {
+	height: 100%;
+	overflow: scroll;
+}

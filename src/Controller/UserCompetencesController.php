@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserCompetencesController extends AbstractController
@@ -21,6 +22,9 @@ class UserCompetencesController extends AbstractController
         $userCompetence = new UserCompetences;
 
         $form = $this->createForm(UserCompetencesType::class);
+        $form->add('Ajouter', SubmitType::class, [
+            'label' => 'Ajouter'
+        ]);
 
         $form->handleRequest($request);
 
@@ -46,6 +50,10 @@ class UserCompetencesController extends AbstractController
     {
         //dd($userCompetence);
         $form = $this->createForm(UserCompetencesType::class, $userCompetence);
+        $form->add('Ajouter', SubmitType::class, [
+            'label' => 'modifier'
+        ]);
+        
         $form->remove('competence');
 
         $form->handleRequest($request);
